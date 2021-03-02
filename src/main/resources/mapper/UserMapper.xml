@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.sicnu.cs.employment.mapper.UserMapper">
+    <resultMap id="userResultMap" type="cn.sicnu.cs.employment.domain.entity.User">
+        <id column="id" property="id"/>
+        <result column="username" property="username"/>
+        <result column="password" property="password"/>
+        <result column="email" property="email"/>
+        <result column="mobile" property="mobile"/>
+        <result column="status" property="status"/>
+        <result column="create_time" property="createTime"/>
+        <result column="expire_time" property="expireTime"/>
+        <result column="account_non_expired" property="accountNonExpired"/>
+        <result column="account_non_locked" property="accountNonLocked"/>
+        <result column="credentials_non_expired" property="credentialsNonExpired"/>
+        <result column="enabled" property="enabled"/>
+        <collection property="authorities" column="id" ofType="cn.sicnu.cs.employment.domain.entity.Role" select="findRolesByUserId"/>
+    </resultMap>
+
+    <select id="findRolesByUserId" resultType="cn.sicnu.cs.employment.domain.entity.Role">
+        SELECT t3.id, t3.authority
+        FROM `t_user` t1
+        LEFT JOIN `t_user_role` t2 on t1.id=t2.user_id
+        LEFT JOIN `t_role` t3 on t2.role_id = t3.id
+        WHERE t1.id = #{id}
+    </select>
+
+    <select id="countByUsername" resultType="long" parameterType="string">
+        SELECT COUNT(*)
+        FROM `t_user`
+        WHERE `username` = #{username}
+    </select>
+
+    <select id="countByEmail" resultType="long" parameterType="string">
+        SELECT COUNT(*)
+        FROM `t_user`
+        WHERE `email` = #{email}
+    </select>
+
+    <select id="countByMobile" resultType="long" parameterType="string">
+        SELECT COUNT(*)
+        FROM `t_user`
+        WHERE `mobile` = #{mobile}
+    </select>
+
+    <select id="findOptionalByUsername" resultMap="userResultMap" parameterType="string">
+        SELECT *
+        FROM `t_user`
+        WHERE `username` = #{username}
+    </select>
+    <select id="findStatusByUsername" resultType="java.lang.Boolean" parameterType="string">
+        SELECT `status`
+        FROM `t_user`
+        WHERE `username` = #{username}
+    </select>
+
+
+</mapper>

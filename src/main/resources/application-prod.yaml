@@ -1,0 +1,16 @@
+server:
+  port: 80
+
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: ${MYSQL_URL}
+    username: ${MYSQL_USERNAME}
+    password: ${MYSQL_PASSWORD}
+    type: com.zaxxer.hikari.HikariDataSource
+    hikari:
+      max-lifetime: 180000
+      maximum-pool-size: 20
+      idle-timeout: 60000
+      minimum-idle: 5
+      connection-timeout: 20000

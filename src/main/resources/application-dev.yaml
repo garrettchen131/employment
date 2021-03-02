@@ -1,0 +1,20 @@
+server:
+  port: 80
+
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://127.0.0.1:3306/db_employment?useSSL=false&serverTimezone=GMT%2B8
+    username: root
+    password: 420130zxc
+    type: com.zaxxer.hikari.HikariDataSource
+    hikari:
+      max-lifetime: 180000
+      maximum-pool-size: 20
+      idle-timeout: 60000
+      minimum-idle: 5
+      connection-timeout: 20000
+
+logging:
+  level:
+   root: info
