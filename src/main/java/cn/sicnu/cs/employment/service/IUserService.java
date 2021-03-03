@@ -2,6 +2,8 @@ package cn.sicnu.cs.employment.service;
 
 import cn.sicnu.cs.employment.domain.entity.User;
 
+import java.util.Optional;
+
 public interface IUserService {
 
     boolean isUsernameExisted(String username);
@@ -12,5 +14,11 @@ public interface IUserService {
 
     void register(User user);
 
+    String getUsernameByEmail(String email);
 
+//    Optional<User> login(String str, String password, String method);
+
+//    Long LoginByUsername(String username, String password);
+//
+//    Long LoginByEmail(String email, String password);
 }

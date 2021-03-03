@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.NoSuchElementException;
+import java.util.Optional;
 import java.util.Set;
 
 import static cn.sicnu.cs.employment.common.Constants.ROLE_PERSON;
@@ -55,4 +56,32 @@ public class UserServiceImpl implements IUserService {
                         }
                 );
     }
+
+    @Override
+    public String getUsernameByEmail(String email) {
+        return userMapper.findOptionalByEmail(email).get().getUsername();
+    }
+
+//    @Override
+//    public Optional<User> login(String str, String password, String method) {
+//        if ("email".equals(method)) {
+//            return userMapper.findOptionalByEmailAndPassword(str, password);
+//        } else if ("username".equals(method)) {
+//            return userMapper.findOptionalByUserNameAndPassword(str, password);
+//        } else {
+//            return Optional.empty();
+//        }
+//    }
+
+
+//    @Override
+//    public Long LoginByUsername(String username, String password) {
+//         return userMapper.findOptionalByUserNameAndPassword(username,password).get().getId();
+//    }
+//
+//    @Override
+//    public Long LoginByEmail(String email, String password) {
+//        return userMapper.findOptionalByEmailAndPassword(email,password).get().getId();
+//
+//    }
 }

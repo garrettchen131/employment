@@ -18,13 +18,13 @@
         <collection property="authorities" column="id" ofType="cn.sicnu.cs.employment.domain.entity.Role" select="findRolesByUserId"/>
     </resultMap>
 
-<!--    <select id="findRolesByUserId" resultType="cn.sicnu.cs.employment.domain.entity.Role">-->
-<!--        SELECT t3.id, t3.authority-->
-<!--        FROM `t_user` t1-->
-<!--        LEFT JOIN `t_user_role` t2 on t1.id=t2.user_id-->
-<!--        LEFT JOIN `t_role` t3 on t2.role_id = t3.id-->
-<!--        WHERE t1.id = #{id}-->
-<!--    </select>-->
+    <select id="findRolesByUserId" resultType="cn.sicnu.cs.employment.domain.entity.Role">
+        SELECT t3.id, t3.authority
+        FROM `t_user` t1
+        LEFT JOIN `t_user_role` t2 on t1.id=t2.user_id
+        LEFT JOIN `t_role` t3 on t2.role_id = t3.id
+        WHERE t1.id = #{id}
+    </select>
 
     <select id="countByUsername" resultType="long" parameterType="string">
         SELECT COUNT(*)
@@ -54,6 +54,21 @@
         FROM `t_user`
         WHERE `username` = #{username}
     </select>
+    <select id="findOptionalByEmail" resultMap="userResultMap" parameterType="string">
+        SELECT *
+        FROM `t_user`
+        WHERE `email` = #{email}
+    </select>
+<!--    <select id="findOptionalByUserNameAndPassword" resultMap="userResultMap">-->
+<!--        SELECT *-->
+<!--        FROM `t_user`-->
+<!--        WHERE `username` = #{username} AND `password` = #{password}-->
+<!--    </select>-->
+<!--    <select id="findOptionalByEmailAndPassword" resultMap="userResultMap">-->
+<!--        SELECT *-->
+<!--        FROM `t_user`-->
+<!--        WHERE `email` = #{email} AND `password` = #{password}-->
+<!--    </select>-->
 
 
 </mapper>

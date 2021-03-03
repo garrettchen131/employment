@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.Optional;
+import java.util.function.Supplier;
 
 
 @Mapper
@@ -20,6 +21,8 @@ public interface UserMapper extends BaseMapper<User> {
     Boolean findStatusByUsername(@Param("username") String username);
 
     Optional<User> findOptionalByUsername(@Param("username") String username);
+
+    Optional<User> findOptionalByEmail(@Param("email") String email);
 
 
     //Set<Role> findRolesByUserId(@Param("id") Long id);

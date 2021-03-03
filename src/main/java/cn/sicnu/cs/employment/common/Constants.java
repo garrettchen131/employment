@@ -1,5 +1,7 @@
 package cn.sicnu.cs.employment.common;
 
+import javax.xml.crypto.dsig.spec.XSLTTransformParameterSpec;
+
 public class Constants {
 
     public static final String PROBLEM_BASE_URI = "https://sicnu.cn";
@@ -26,6 +28,6 @@ public class Constants {
     public static final int MOBILE_EXISTED = -2;
     // 其他错误
     public static final int OTHER_ERROR = -9;
-
+    public static final int USER_INPUT_ERROR = -99;
 
 }

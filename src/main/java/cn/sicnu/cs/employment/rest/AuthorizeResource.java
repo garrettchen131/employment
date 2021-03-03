@@ -14,13 +14,18 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.imageio.ImageIO;
+import javax.servlet.ServletException;
 import javax.servlet.ServletOutputStream;
+import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.net.http.HttpResponse;
+import java.util.Optional;
 
 import static cn.sicnu.cs.employment.common.Constants.*;
 import static cn.sicnu.cs.employment.common.util.RequestUtil.getCurrentUrl;
@@ -38,7 +43,7 @@ public class AuthorizeResource {
     public ResultInfo<Void> register(@Valid @RequestBody UserVo userVo) {
         if (userService.isUsernameExisted(userVo.getUsername())) {
             log.info("Username existed!");
-            return ResultInfoUtil.buildError(USERNAME_EXISTED,"用户名重复",getCurrentUrl());
+            return ResultInfoUtil.buildError(USERNAME_EXISTED, "用户名重复", getCurrentUrl());
         }
         if (userService.isEmailExisted(userVo.getEmail())) {
             log.info("Email existed!");
@@ -58,6 +63,23 @@ public class AuthorizeResource {
         return ResultInfoUtil.buildSuccess(getCurrentUrl());
     }
 
+    /**
+     * 通过邮箱返回用户的用户名
+     *
+     * @return
+     */
+
+    @PostMapping("/getName")
+    public ResultInfo<String> login(@RequestParam("email") String email) {
+        log.info("login method is EMAIL ={}=", email);
+        if (userService.isEmailExisted(email)) {
+            String username = userService.getUsernameByEmail(email);
+            return ResultInfoUtil.buildSuccess(getCurrentUrl(),username);
+        } else {
+            log.info("email ={}= not exists", email);
+            return ResultInfoUtil.buildError(USER_INPUT_ERROR, "邮箱不存在", getCurrentUrl());
+        }
+    }
 
     @GetMapping("/me")
     public ResultInfo<Authentication> me() {
@@ -66,6 +88,7 @@ public class AuthorizeResource {
 
     /**
      * 获取验证码图片
+     *
      * @param httpServletRequest
      * @param httpServletResponse
      * @throws Exception
@@ -79,7 +102,7 @@ public class AuthorizeResource {
             // 生产验证码字符串并保存到session中
             String createText = defaultKaptcha.createText();
             httpServletRequest.getSession().setAttribute("kapCode", createText);
-            log.info("生成验证码={}",createText);
+            log.info("生成验证码={}", createText);
             // 使用生产的验证码字符串返回一个BufferedImage对象并转为byte写入到byte数组中
             BufferedImage challenge = defaultKaptcha.createImage(createText);
             ImageIO.write(challenge, "jpg", jpegOutputStream);
@@ -102,18 +125,16 @@ public class AuthorizeResource {
     @PostMapping("/checkKap")
     public ResultInfo<Void> checkKaptchaCode(HttpServletRequest httpServletRequest,
                                              @RequestParam("code") String getCode) {
-        log.info("接收到的验证码={}",getCode);
+        log.info("接收到的验证码={}", getCode);
         String kapCode = (String) httpServletRequest.getSession().getAttribute("kapCode");
-        if (kapCode != null){
-            if (kapCode.equals(getCode)){
+        if (kapCode != null) {
+            if (kapCode.equals(getCode)) {
                 httpServletRequest.getSession().removeAttribute("kapCode");
                 return ResultInfoUtil.buildSuccess(getCurrentUrl());
-            }
-            else {
+            } else {
                 return ResultInfoUtil.buildError(Constants.ERROR_CODE, "验证码错误", getCurrentUrl());
             }
-        }
-        else {
+        } else {
             return ResultInfoUtil.buildError(Constants.OTHER_ERROR, "请重新生成验证码", getCurrentUrl());
         }
     }
