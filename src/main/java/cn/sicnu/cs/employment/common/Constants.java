@@ -24,6 +24,8 @@ public class Constants {
     public static final int USERNAME_EXISTED = -1;
     public static final int EMAIL_EXISTED = -2;
     public static final int MOBILE_EXISTED = -2;
+    // 其他错误
+    public static final int OTHER_ERROR = -9;
 
 
 }
