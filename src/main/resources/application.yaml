@@ -10,3 +10,7 @@ app:
   jwt:
     key: ${TOKEN_KEY}
     refresh-key: ${REFRESH_TOKEN_KEY}
+
+spring:
+  profiles:
+    active: dev

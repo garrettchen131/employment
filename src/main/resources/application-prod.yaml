@@ -4,9 +4,9 @@ server:
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: ${MYSQL_URL}
-    username: ${MYSQL_USERNAME}
-    password: ${MYSQL_PASSWORD}
+    url: ${CK_YSQL_URL}
+    username: ${CK_MYSQL_USERNAME}
+    password: ${CK_MYSQL_PASSWORD}
     type: com.zaxxer.hikari.HikariDataSource
     hikari:
       max-lifetime: 180000
