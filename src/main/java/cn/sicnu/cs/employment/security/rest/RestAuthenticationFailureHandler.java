@@ -31,10 +31,10 @@ public class RestAuthenticationFailureHandler implements AuthenticationFailureHa
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         response.setCharacterEncoding("UTF-8");
         val errData = Map.of(
-                "title", "认证失败",
-                "details", ex.getMessage()
+                "code",0,
+                "title", "登录失败",
+                "message", ex.getMessage()
         );
         response.getWriter().println(objectMapper.writeValueAsString(errData));
-
     }
 }
