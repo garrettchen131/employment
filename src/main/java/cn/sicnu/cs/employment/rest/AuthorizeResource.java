@@ -34,7 +34,7 @@ public class AuthorizeResource {
             log.info("Email existed!");
             return ResultInfoUtil.buildError(EMAIL_EXISTED, "邮箱重复", getCurrentUrl());
         }
-        if (userService.isMobileExisted(userVo.getEmail())) {
+        if (userService.isMobileExisted(userVo.getMobile())) {
             log.info("Mobile existed!");
             return ResultInfoUtil.buildError(MOBILE_EXISTED, "电话号码重复", getCurrentUrl());
         }
