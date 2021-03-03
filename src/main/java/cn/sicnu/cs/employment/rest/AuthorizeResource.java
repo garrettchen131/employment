@@ -3,7 +3,9 @@ package cn.sicnu.cs.employment.rest;
 import cn.sicnu.cs.employment.common.Constants;
 import cn.sicnu.cs.employment.common.ResultInfo;
 import cn.sicnu.cs.employment.common.ResultInfoUtil;
+import cn.sicnu.cs.employment.common.util.RequestUtil;
 import cn.sicnu.cs.employment.domain.vo.UserVo;
+import cn.sicnu.cs.employment.service.ISendMail;
 import cn.sicnu.cs.employment.service.IUserService;
 import cn.sicnu.cs.employment.domain.entity.User;
 import com.google.code.kaptcha.impl.DefaultKaptcha;
@@ -19,6 +21,7 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 import java.awt.image.BufferedImage;
@@ -38,6 +41,7 @@ public class AuthorizeResource {
 
     private final DefaultKaptcha defaultKaptcha;
     private final IUserService userService;
+    private final ISendMail sendMail;
 
     @PostMapping("/register")
     public ResultInfo<Void> register(@Valid @RequestBody UserVo userVo) {
@@ -72,13 +76,12 @@ public class AuthorizeResource {
     @PostMapping("/getName")
     public ResultInfo<String> login(@RequestParam("email") String email) {
         log.info("login method is EMAIL ={}=", email);
-        if (userService.isEmailExisted(email)) {
-            String username = userService.getUsernameByEmail(email);
-            return ResultInfoUtil.buildSuccess(getCurrentUrl(),username);
-        } else {
+        if (!userService.isEmailExisted(email)) {
             log.info("email ={}= not exists", email);
             return ResultInfoUtil.buildError(USER_INPUT_ERROR, "邮箱不存在", getCurrentUrl());
         }
+        String username = userService.getUsernameByEmail(email);
+        return ResultInfoUtil.buildSuccess(getCurrentUrl(), username);
     }
 
     @GetMapping("/me")
@@ -89,8 +92,6 @@ public class AuthorizeResource {
     /**
      * 获取验证码图片
      *
-     * @param httpServletRequest
-     * @param httpServletResponse
      * @throws Exception
      */
     @GetMapping("/getKap")
@@ -137,5 +138,34 @@ public class AuthorizeResource {
         } else {
             return ResultInfoUtil.buildError(Constants.OTHER_ERROR, "请重新生成验证码", getCurrentUrl());
         }
+    }
+
+    @PostMapping("/sendEmail")
+    public ResultInfo<Void> sendVerifyCodeEmail(HttpSession httpSession,
+                                                @RequestParam("receiver") String receiver) {
+        String emailCode = sendMail.sendEmail(receiver);
+        httpSession.setAttribute("emailCode", emailCode);
+        httpSession.setAttribute("emailTime", System.currentTimeMillis());
+        log.info("send code ={}= to ={}=",emailCode, receiver);
+        return ResultInfoUtil.buildSuccess(getCurrentUrl());
+    }
+
+    @PostMapping("/checkEmail")
+    public ResultInfo<Void> checkVerifyCode(HttpSession httpSession,
+                                            @RequestParam("verifyCode") String verifyCode) {
+        String emailCode = (String) httpSession.getAttribute("emailCode");
+        if (emailCode == null){
+            return ResultInfoUtil.buildError(OTHER_ERROR,"系统错误！请重新发送验证码",getCurrentUrl());
+        }
+        Long emailTime = (Long) httpSession.getAttribute("emailTime");
+        if (System.currentTimeMillis() - emailTime > 1000 * 60 * 5) {
+            return ResultInfoUtil.buildError(TIME_OUT, "验证码已失效，请重新发送", getCurrentUrl());
+        }
+        if(! emailCode.equals(verifyCode)){
+            return ResultInfoUtil.buildError(ERROR_CODE,"验证码错误！",getCurrentUrl());
+        }
+        httpSession.removeAttribute("emailCode");
+        httpSession.removeAttribute("emailTime");
+        return ResultInfoUtil.buildSuccess(getCurrentUrl());
     }
 }
