@@ -91,7 +91,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         filter.setAuthenticationSuccessHandler(new RestAuthenticationSuccessHandler(jwtUtil));
         filter.setAuthenticationFailureHandler(new RestAuthenticationFailureHandler(objectMapper));
         filter.setAuthenticationManager(authenticationManager());
-        filter.setFilterProcessesUrl("/authorize/login");
+        filter.setFilterProcessesUrl("/auth/login");
         return filter;
     }
 
