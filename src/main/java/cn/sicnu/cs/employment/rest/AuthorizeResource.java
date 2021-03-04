@@ -3,11 +3,10 @@ package cn.sicnu.cs.employment.rest;
 import cn.sicnu.cs.employment.common.Constants;
 import cn.sicnu.cs.employment.common.ResultInfo;
 import cn.sicnu.cs.employment.common.ResultInfoUtil;
-import cn.sicnu.cs.employment.common.util.RequestUtil;
+import cn.sicnu.cs.employment.domain.entity.User;
 import cn.sicnu.cs.employment.domain.vo.UserVo;
 import cn.sicnu.cs.employment.service.ISendMail;
 import cn.sicnu.cs.employment.service.IUserService;
-import cn.sicnu.cs.employment.domain.entity.User;
 import com.google.code.kaptcha.impl.DefaultKaptcha;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,19 +15,13 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.imageio.ImageIO;
-import javax.servlet.ServletException;
 import javax.servlet.ServletOutputStream;
-import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
-
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.net.http.HttpResponse;
-import java.util.Optional;
 
 import static cn.sicnu.cs.employment.common.Constants.*;
 import static cn.sicnu.cs.employment.common.util.RequestUtil.getCurrentUrl;
@@ -69,8 +62,6 @@ public class AuthorizeResource {
 
     /**
      * 通过邮箱返回用户的用户名
-     *
-     * @return
      */
 
     @PostMapping("/getName")
@@ -92,12 +83,11 @@ public class AuthorizeResource {
     /**
      * 获取验证码图片
      *
-     * @throws Exception
      */
     @GetMapping("/getKap")
     public void defaultKaptcha(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse)
             throws Exception {
-        byte[] captchaChallengeAsJpeg = null;
+        byte[] captchaChallengeAsJpeg;
         ByteArrayOutputStream jpegOutputStream = new ByteArrayOutputStream();
         try {
             // 生产验证码字符串并保存到session中
