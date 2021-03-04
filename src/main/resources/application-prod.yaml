@@ -14,3 +14,6 @@ spring:
       idle-timeout: 60000
       minimum-idle: 5
       connection-timeout: 20000
+
+logging:
+  level: info
