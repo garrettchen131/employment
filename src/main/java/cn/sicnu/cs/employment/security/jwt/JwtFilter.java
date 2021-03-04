@@ -43,16 +43,19 @@ public class JwtFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        var claimsOpt = Optional.ofNullable((Claims)null);
+        var claimsOpt = Optional.ofNullable((Claims) null);
         if (checkJwtToken(request)) {
             claimsOpt = validateToken(request);
-            claimsOpt.filter(claims -> Objects.nonNull(claims.get("authorities")))
+            claimsOpt.filter(claims -> {
+//                log.info("authorities={}", claims.get("authorities"));
+                return Objects.nonNull(claims.get("authorities"));
+            })
                     .ifPresentOrElse(
                             this::setSpringAuthentication,
                             SecurityContextHolder::clearContext
                     );
         }
-        if (claimsOpt.isPresent()){
+        if (claimsOpt.isPresent()) {
             val un = claimsOpt.get().getSubject();
             val userOpt = userMapper.findOptionalByUsername(un);
             userOpt.ifPresent(user -> request.setAttribute("user", user));
@@ -67,7 +70,7 @@ public class JwtFilter extends OncePerRequestFilter {
     private void writeStatusInfo(HttpServletResponse response) {
         val map = Map.of("status", false, "info", "用户未激活");
         try {
-            val str =  objectMapper.writeValueAsString(map);
+            val str = objectMapper.writeValueAsString(map);
             response.setContentType(MediaType.APPLICATION_JSON_VALUE);
             response.setCharacterEncoding(StandardCharsets.UTF_8.name());
             response.setStatus(HttpStatus.LOCKED.value());
@@ -79,6 +82,7 @@ public class JwtFilter extends OncePerRequestFilter {
 
     private boolean checkJwtToken(HttpServletRequest request) {
         val header = request.getHeader(appProperties.getJwt().getHeader());
+        log.debug("header:{}",header);
         return Strings.isNotEmpty(header) && header.startsWith(appProperties.getJwt().getPrefix());
     }
 
@@ -99,6 +103,5 @@ public class JwtFilter extends OncePerRequestFilter {
                 .collect(Collectors.toList());
         val authentication = new UsernamePasswordAuthenticationToken(claims.getSubject(), null, authorities);
         SecurityContextHolder.getContext().setAuthentication(authentication);
-
     }
 }
