@@ -28,7 +28,7 @@ public class UserInfoVo {
 
     private String school;  //学校
 
-    private String schoolStart;  //入学年月
+    private String schoolStart;  //入学年 月
 
     private String schoolEnd; // 毕业年月
 

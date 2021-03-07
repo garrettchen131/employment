@@ -2,6 +2,7 @@ package cn.sicnu.cs.employment.service.impl;
 
 import cn.sicnu.cs.employment.domain.entity.UserInfo;
 import cn.sicnu.cs.employment.mapper.UserInfoMapper;
+import cn.sicnu.cs.employment.mapper.UserMapper;
 import cn.sicnu.cs.employment.service.IUserInfoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -15,6 +16,7 @@ import static cn.sicnu.cs.employment.common.util.RequestUtil.getCurrentUser;
 public class UserInfoServiceImpl implements IUserInfoService {
 
     private final UserInfoMapper userInfoMapper;
+    private final UserMapper userMapper;
 
     @Override
     @Transactional(rollbackFor = RuntimeException.class)

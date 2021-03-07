@@ -16,6 +16,8 @@ public interface IUserService {
 
     String getUsernameByEmail(String email);
 
+    void resetPassword(User user, String newPassword);
+
 //    Optional<User> login(String str, String password, String method);
 
 //    Long LoginByUsername(String username, String password);

@@ -1,8 +1,8 @@
 package cn.sicnu.cs.employment.service.impl;
 
+import cn.sicnu.cs.employment.domain.entity.User;
 import cn.sicnu.cs.employment.mapper.RoleMapper;
 import cn.sicnu.cs.employment.mapper.UserMapper;
-import cn.sicnu.cs.employment.domain.entity.User;
 import cn.sicnu.cs.employment.service.IUserService;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.NoSuchElementException;
-import java.util.Optional;
 import java.util.Set;
 
 import static cn.sicnu.cs.employment.common.Constants.ROLE_PERSON;
@@ -62,17 +61,14 @@ public class UserServiceImpl implements IUserService {
         return userMapper.findOptionalByEmail(email).get().getUsername();
     }
 
-//    @Override
-//    public Optional<User> login(String str, String password, String method) {
-//        if ("email".equals(method)) {
-//            return userMapper.findOptionalByEmailAndPassword(str, password);
-//        } else if ("username".equals(method)) {
-//            return userMapper.findOptionalByUserNameAndPassword(str, password);
-//        } else {
-//            return Optional.empty();
-//        }
-//    }
-
+    @Override
+    @Transactional(rollbackFor = RuntimeException.class)
+    public void resetPassword(User user, String newPassword) {
+        User userToUpdate = new User();
+        userToUpdate.withId(user.getId())
+                .withPassword(passwordEncoder.encode(newPassword));
+        userMapper.updateById(userToUpdate);
+    }
 
 //    @Override
 //    public Long LoginByUsername(String username, String password) {

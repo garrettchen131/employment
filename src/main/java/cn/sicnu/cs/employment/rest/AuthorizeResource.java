@@ -25,6 +25,7 @@ import java.io.ByteArrayOutputStream;
 
 import static cn.sicnu.cs.employment.common.Constants.*;
 import static cn.sicnu.cs.employment.common.util.RequestUtil.getCurrentUrl;
+import static cn.sicnu.cs.employment.common.util.RequestUtil.getCurrentUser;
 
 @Slf4j
 @RestController
@@ -157,5 +158,11 @@ public class AuthorizeResource {
         httpSession.removeAttribute("emailCode");
         httpSession.removeAttribute("emailTime");
         return ResultInfoUtil.buildSuccess(getCurrentUrl());
+    }
+
+    @GetMapping("/test")
+    public ResultInfo<User> test(){
+//        log.info("password={}",getCurrentUser().getPassword());
+        return ResultInfoUtil.buildSuccess(getCurrentUrl(),getCurrentUser());
     }
 }
