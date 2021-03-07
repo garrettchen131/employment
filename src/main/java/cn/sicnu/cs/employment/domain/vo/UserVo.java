@@ -1,6 +1,5 @@
 package cn.sicnu.cs.employment.domain.vo;
 
-import cn.sicnu.cs.employment.validation.annotation.PasswordMatches;
 import cn.sicnu.cs.employment.validation.annotation.ValidPassword;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

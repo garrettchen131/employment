@@ -9,17 +9,22 @@ mybatis-plus:
 
 app:
   jwt:
-    key: ${TOKEN_KEY}
-    refresh-key: ${REFRESH_TOKEN_KEY}
+    #key: ${TOKEN_KEY}
+    key: 8V+dv80iKlL/Q5XVCcD6sPOu/1VsoiCmo5hPYioQMHyyEpbsPztzwo1YQonm/bUKthBLQ17gFVpbFYNG5h2d9Q==
+
+    #refresh-key: ${REFRESH_TOKEN_KEY}
+    refresh-key: fYPyLYNDF23d4fdsgjUsqK1oU9WEUIHJKDgdfertgfdFUrp7EmylGuJ2FP0E5zySpITNxYJLmKVkvGuhJNfUWX
 
 spring:
   profiles:
     active: dev
 
   mail:
-    username: ${MAIL_USERNAME}
+    username: 1765116032@qq.com
+    #username: ${MAIL_USERNAME}
     host: smtp.qq.com
-    password: ${MAIL_PASSWORD} #客户端授权码
+    #password: ${MAIL_PASSWORD} #客户端授权码
+    password: jrizfrasydjhbdjj #客户端授权码
     protocol: smtp #发送邮件协议
     properties.smtp.ssl.enable: true  #开启ssl安全连接
     properties.mail.smtp.auth: true
