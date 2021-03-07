@@ -13,12 +13,12 @@ public class UserServiceTest extends BaseTest {
 
     @Test
     public void testRegister() {
-        userService.register(User.builder()
-                .username("abcde")
-                .email("abcde@qq.com")
-                .password("passwordabcde")
-                .mobile("17381579851")
-                .build());
+//        userService.register(User.builder()
+//                .username("abcde")
+//                .email("abcde@qq.com")
+//                .password("passwordabcde")
+//                .mobile("17381579851")
+//                .build());
 
     }
 
