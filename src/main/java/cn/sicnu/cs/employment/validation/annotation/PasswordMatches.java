@@ -16,6 +16,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Retention(RUNTIME)
 @Constraint(validatedBy = PasswordMatchesValidator.class)
 @Documented
+@Deprecated
 public @interface PasswordMatches {
 
     String message() default "{PasswordMatches.userVo}";

@@ -15,7 +15,7 @@ import javax.validation.constraints.Size;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@PasswordMatches
+//@PasswordMatches
 public class UserVo {
 
     @NotNull
@@ -25,7 +25,7 @@ public class UserVo {
     @ValidPassword
     private String password;
 
-    private String matchingPassword;
+//    private String matchingPassword;
 
     @NotNull
     @Size(min = 11, max = 11)
