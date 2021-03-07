@@ -1,5 +1,5 @@
 server:
-  port: 80
+  port: 12345
 
 spring:
   datasource:
@@ -20,4 +20,9 @@ spring:
 
 logging:
   level:
-   root: debug
+    root: info
+
+mybatis-plus:
+  mapper-locations: classpath*:mapper/**Mapper.xml
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl

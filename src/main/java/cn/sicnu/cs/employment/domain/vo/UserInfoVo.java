@@ -28,13 +28,9 @@ public class UserInfoVo {
 
     private String school;  //学校
 
-    private String startYear;  //入学年份
+    private String schoolStart;  //入学年月
 
-    private String startMonth;  //入学月份
-
-    private String endYear; // 毕业年份
-
-    private String endMonth;  //毕业月份
+    private String schoolEnd; // 毕业年月
 
     private String training;  //培训经历
 
@@ -44,13 +40,9 @@ public class UserInfoVo {
 
     private String position;  //职位
 
-    private String workStartYear;  //入职年份
+    private String workStart;  //入职年月
 
-    private String workStartMonth; //入职月份
-
-    private String workEndYear;  //离职年份
-
-    private String workEndMonth;  //离职月份
+    private String workEnd;  //离职年月
 
     private String workContent;  //工作内容
 

@@ -13,7 +13,7 @@
     <version>0.0.1-SNAPSHOT</version>
     <name>employment</name>
     <description>Employment project for Spring Boot</description>
-    <packaging>war</packaging>
+<!--    <packaging>war</packaging>-->
     <properties>
         <java.version>11</java.version>
         <mybatis.plus>3.4.2</mybatis.plus>
