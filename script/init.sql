@@ -83,6 +83,7 @@ CREATE TABLE `t_user_info`(
     `ex_position` VARCHAR(256) DEFAULT '' COMMENT '期望职位',
     `project_ex` VARCHAR (256) DEFAULT '' COMMENT '项目经历',
     `gender` VARCHAR(4)	DEFAULT '' COMMENT '性别',
+    `signature` VARCHAR(255) DEFAULT '' COMMENT '个性签名',
     PRIMARY KEY (`user_id`)
 )ENGINE = INNODB DEFAULT CHARSET = utf8mb4 COMMENT '用户信息表';
 
