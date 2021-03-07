@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.NoSuchElementException;
 import java.util.Set;
 
+import static cn.sicnu.cs.employment.common.Constants.ROLE_ENTERPRISE;
 import static cn.sicnu.cs.employment.common.Constants.ROLE_PERSON;
 import static cn.sicnu.cs.employment.common.util.RequestUtil.getCurrentUser;
 
@@ -42,8 +43,9 @@ public class UserServiceImpl implements IUserService {
 
     @Override
     @Transactional(rollbackFor = RuntimeException.class)
-    public void register(User user) {
-        roleMapper.findOptionalByAuthority(ROLE_PERSON)
+    public void register(boolean isCom, User user) {
+        String ROLE = isCom ? ROLE_ENTERPRISE : ROLE_PERSON;
+        roleMapper.findOptionalByAuthority(ROLE)
                 .ifPresentOrElse(
                         role -> {
                             val userToSave = user

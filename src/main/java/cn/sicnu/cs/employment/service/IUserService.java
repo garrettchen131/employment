@@ -12,7 +12,7 @@ public interface IUserService {
 
     boolean isMobileExisted(String mobile);
 
-    void register(User user);
+    void register(boolean isCom, User user);
 
 //    String getUsernameByEmail(String email);
 
