@@ -48,6 +48,8 @@
         SELECT *
         FROM `t_user`
         WHERE `username` = #{username}
+        OR `email` = #{username}
+        OR `mobile` = #{username}
     </select>
     <select id="findStatusByUsername" resultType="java.lang.Boolean" parameterType="string">
         SELECT `status`
@@ -59,6 +61,11 @@
         FROM `t_user`
         WHERE `email` = #{email}
     </select>
+    <update id="activeUser">
+        UPDATE `t_user`
+        SET `status` = true
+        WHERE `id` = #{id}
+    </update>
 <!--    <select id="findOptionalByUserNameAndPassword" resultMap="userResultMap">-->
 <!--        SELECT *-->
 <!--        FROM `t_user`-->

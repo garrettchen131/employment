@@ -14,7 +14,7 @@ public class UserInfoVo {
 
     private String personName; //姓名
 
-    private Date yearMonth; //出生年月
+    private String birthDay; //出生年月
 
     private String address; //所在地址
 

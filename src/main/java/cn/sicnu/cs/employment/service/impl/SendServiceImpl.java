@@ -1,5 +1,6 @@
 package cn.sicnu.cs.employment.service.impl;
 
+import cn.sicnu.cs.employment.exception.CustomException;
 import cn.sicnu.cs.employment.service.ISendMail;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -11,6 +12,8 @@ import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.stereotype.Service;
 
 import java.security.SecureRandom;
+
+import static cn.sicnu.cs.employment.common.Constants.OTHER_ERROR;
 
 @Slf4j
 @Service
@@ -37,7 +40,11 @@ public class SendServiceImpl implements ISendMail {
                 +"，本次验证码五分钟内有效，请及时输入。（请勿泄露此验证码）\n"
         );
         // 发送邮件
-        javaMailSender.send(simpleMailMessage);
+        try {
+            javaMailSender.send(simpleMailMessage);
+        }catch (Exception e){
+            throw new CustomException(OTHER_ERROR, "邮件发送失败！");
+        }
         return verCode;
     }
 

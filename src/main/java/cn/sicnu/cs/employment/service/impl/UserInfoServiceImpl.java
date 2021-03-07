@@ -9,8 +9,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
 
-import static cn.sicnu.cs.employment.common.util.RequestUtil.getCurrentUser;
-
 @Service
 @RequiredArgsConstructor
 public class UserInfoServiceImpl implements IUserInfoService {
@@ -21,12 +19,14 @@ public class UserInfoServiceImpl implements IUserInfoService {
     @Override
     @Transactional(rollbackFor = RuntimeException.class)
     public void addUserInfo(UserInfo userInfo, Long userId) {
-        UserInfo info = userInfo.withUserId(userInfo.getUserId());
+        System.out.println(userInfo.getPersonName());
+        UserInfo info = userInfo.withUserId(userId);
         if (ObjectUtils.isEmpty(userInfoMapper.selectById(userId))) {
             userInfoMapper.insert(info);
         } else {
             userInfoMapper.updateById(info);
         }
+        userMapper.activeUser(userId);
     }
 
     @Override

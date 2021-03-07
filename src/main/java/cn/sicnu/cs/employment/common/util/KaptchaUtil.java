@@ -35,7 +35,6 @@ public class KaptchaUtil {
         properties.setProperty("kaptcha.textproducer.font.names", "宋体,楷体,微软雅黑");
         Config config = new Config(properties);
         kaptcha.setConfig(config);
-
         return kaptcha;
     }
 

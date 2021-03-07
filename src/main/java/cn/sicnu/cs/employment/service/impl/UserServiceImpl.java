@@ -1,6 +1,7 @@
 package cn.sicnu.cs.employment.service.impl;
 
 import cn.sicnu.cs.employment.domain.entity.User;
+import cn.sicnu.cs.employment.exception.CustomException;
 import cn.sicnu.cs.employment.mapper.RoleMapper;
 import cn.sicnu.cs.employment.mapper.UserMapper;
 import cn.sicnu.cs.employment.service.IUserService;
@@ -14,6 +15,7 @@ import java.util.NoSuchElementException;
 import java.util.Set;
 
 import static cn.sicnu.cs.employment.common.Constants.ROLE_PERSON;
+import static cn.sicnu.cs.employment.common.util.RequestUtil.getCurrentUser;
 
 @Service
 @RequiredArgsConstructor
@@ -56,18 +58,36 @@ public class UserServiceImpl implements IUserService {
                 );
     }
 
-    @Override
-    public String getUsernameByEmail(String email) {
-        return userMapper.findOptionalByEmail(email).get().getUsername();
-    }
+//    @Override
+//    public String getUsernameByEmail(String email) {
+//        if(userMapper.findOptionalByEmail(email).isPresent()){
+//            return userMapper.findOptionalByEmail(email).get().getUsername();
+//        } else {
+//            throw new NoSuchElementException("Cannot find User!");
+//        }
+//    }
 
     @Override
     @Transactional(rollbackFor = RuntimeException.class)
     public void resetPassword(User user, String newPassword) {
+        if (user.getId() == null) {
+            // 表示是通过找回密码【邮箱进入的此方法】
+            userMapper.findOptionalByEmail(user.getEmail()).ifPresent(
+                    // 添加id
+                    userEmail -> user.withEmail(userEmail.getEmail())
+            );
+        }
         User userToUpdate = new User();
         userToUpdate.withId(user.getId())
-                .withPassword(passwordEncoder.encode(newPassword));
+                    .withPassword(passwordEncoder.encode(newPassword));
         userMapper.updateById(userToUpdate);
+    }
+
+    @Override
+    @Transactional(rollbackFor = RuntimeException.class)
+    public void activeUser(User user) {
+        Long id = getCurrentUser().getId();
+        userMapper.activeUser(id);
     }
 
 //    @Override

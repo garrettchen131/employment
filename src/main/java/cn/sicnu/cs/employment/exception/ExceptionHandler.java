@@ -10,9 +10,5 @@ public class ExceptionHandler implements ProblemHandling {
         return true;
     }
 
-//    @org.springframework.web.bind.annotation.ExceptionHandler(CustomException.class)
-//    @ResponseBody
-//    public ResultInfo<CustomException> customException(String path, CustomException exception){
-//        return ResultInfoUtil.buildError(exception.getCode(),exception.getMessage(),path);
-//    }
+
 }

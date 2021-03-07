@@ -27,7 +27,8 @@ public class UserResource {
     private final IUserService userService;
 
     @PostMapping("/info")
-    public ResultInfo<Void> postUserInfo(UserInfoVo userInfoVo) {
+    public ResultInfo<Void> postUserInfo(@RequestBody UserInfoVo userInfoVo) {
+        System.out.println("===========userInfo=" + userInfoVo);
         val userInfo = new UserInfo();
         BeanUtils.copyProperties(userInfoVo, userInfo);
         userInfoService.addUserInfo(userInfo, getCurrentUser().getId());

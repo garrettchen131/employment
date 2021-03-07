@@ -21,7 +21,7 @@ public class UserInfo {
 
     private String personName; //姓名
 
-    private Date birthDay; //出生年月
+    private String birthDay; //出生年月
 
     private String address; //所在地址
 

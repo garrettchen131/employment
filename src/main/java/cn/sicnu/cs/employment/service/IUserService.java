@@ -14,9 +14,11 @@ public interface IUserService {
 
     void register(User user);
 
-    String getUsernameByEmail(String email);
+//    String getUsernameByEmail(String email);
 
     void resetPassword(User user, String newPassword);
+
+    void activeUser(User user);
 
 //    Optional<User> login(String str, String password, String method);
 
