@@ -26,7 +26,7 @@ public class AppProperties {
         private String prefix = "Bearer "; // HTTP 报头的认证字段的值的前缀
 
         @Min(5000L)
-        private long accessTokenExpireTime = 60 * 1000L; // Access Token 过期时间
+        private long accessTokenExpireTime = 10 * 60 * 1000L; // Access Token 过期时间
 
         @Min(3600000L)
         private long refreshTokenExpireTime = 30 * 24 * 3600 * 1000L; // Refresh Token 过期时间
