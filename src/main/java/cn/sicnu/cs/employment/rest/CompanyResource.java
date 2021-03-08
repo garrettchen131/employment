@@ -4,6 +4,7 @@ package cn.sicnu.cs.employment.rest;
 import cn.sicnu.cs.employment.common.ResultInfo;
 import cn.sicnu.cs.employment.common.ResultInfoUtil;
 import cn.sicnu.cs.employment.domain.entity.CompanyInfo;
+import cn.sicnu.cs.employment.domain.entity.User;
 import cn.sicnu.cs.employment.domain.vo.CompanyInfoVo;
 import cn.sicnu.cs.employment.service.ICompanyInfoService;
 import lombok.RequiredArgsConstructor;
@@ -33,9 +34,15 @@ public class CompanyResource {
 
     @GetMapping("/info")
     public ResultInfo<CompanyInfoVo> getCompanyInfo() {
-        val companyInfo = companyInfoService.getCompanyInfo(getCurrentUser().getId());
+        User currentUser = getCurrentUser();
+        val companyInfo = companyInfoService.getCompanyInfo(currentUser.getId());
         val companyInfoVo = new CompanyInfoVo();
         BeanUtils.copyProperties(companyInfo, companyInfoVo);
-        return ResultInfoUtil.buildSuccess(getCurrentUrl(), companyInfoVo);
+        //补充邮箱和电话
+        CompanyInfoVo companyInfoToSend = companyInfoVo
+                .withUsername(currentUser.getUsername())
+                .withMobile(currentUser.getMobile())
+                .withEmail(currentUser.getEmail());
+        return ResultInfoUtil.buildSuccess(getCurrentUrl(), companyInfoToSend);
     }
 }

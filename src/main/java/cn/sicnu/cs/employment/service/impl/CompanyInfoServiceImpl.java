@@ -8,6 +8,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
+import static cn.sicnu.cs.employment.common.util.RequestUtil.getCurrentUser;
+
 @Service
 @RequiredArgsConstructor
 public class CompanyInfoServiceImpl implements ICompanyInfoService {

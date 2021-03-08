@@ -1,10 +1,11 @@
 package cn.sicnu.cs.employment.service;
 
 import cn.sicnu.cs.employment.domain.entity.User;
+import com.baomidou.mybatisplus.extension.service.IService;
 
 import java.util.Optional;
 
-public interface IUserService {
+public interface IUserService extends IService<User> {
 
     boolean isUsernameExisted(String username);
 
@@ -20,9 +21,4 @@ public interface IUserService {
 
     void activeUser(User user);
 
-//    Optional<User> login(String str, String password, String method);
-
-//    Long LoginByUsername(String username, String password);
-//
-//    Long LoginByEmail(String email, String password);
 }

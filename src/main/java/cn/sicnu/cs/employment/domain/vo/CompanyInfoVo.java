@@ -4,9 +4,11 @@ package cn.sicnu.cs.employment.domain.vo;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.With;
 
 import javax.validation.constraints.NotNull;
 
+@With
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -28,5 +30,11 @@ public class CompanyInfoVo {
     private String website; //公司网址
 
     private String detail; //公司简介
+
+    private String email; //公司邮箱
+
+    private String mobile; //公司联系方式
+
+    private String username; //登录账号
 
 }

@@ -5,6 +5,7 @@ import cn.sicnu.cs.employment.common.ResultInfoUtil;
 import cn.sicnu.cs.employment.domain.entity.User;
 import cn.sicnu.cs.employment.domain.entity.UserInfo;
 import cn.sicnu.cs.employment.domain.vo.UserInfoVo;
+import cn.sicnu.cs.employment.domain.vo.UserVo;
 import cn.sicnu.cs.employment.service.IUserInfoService;
 import cn.sicnu.cs.employment.service.IUserService;
 import cn.sicnu.cs.employment.validation.annotation.ValidPassword;
@@ -41,23 +42,39 @@ public class UserResource {
         val userInfo = userInfoService.getUserInfo(currentUser.getId());
         val userInfoVo = new UserInfoVo();
         BeanUtils.copyProperties(userInfo, userInfoVo);
-        userInfoVo.withUsername(currentUser.getUsername())
+        //补充用户名和邮箱和电话
+        UserInfoVo UserInfoToSend = userInfoVo
+                .withUsername(currentUser.getUsername())
                 .withMobile(currentUser.getMobile())
                 .withEmail(currentUser.getEmail());
-        return ResultInfoUtil.buildSuccess(getCurrentUrl(), userInfoVo);
+        return ResultInfoUtil.buildSuccess(getCurrentUrl(), UserInfoToSend);
     }
 
     @PostMapping("/psd")
     public ResultInfo<Void> resetPassword(@RequestParam("old") String oldPsd,
-                                          @ValidPassword @RequestParam("new") String newPsd){
-        if(!getCurrentUser().getPassword().equals(oldPsd)){
+                                          @ValidPassword @RequestParam("new") String newPsd) {
+
+        if (!getCurrentUser().getPassword().equals(oldPsd)) {
             return ResultInfoUtil.buildError(PASSWORD_ERROR, "密码错误！", getCurrentUrl());
         }
-        try {
-            userService.resetPassword(getCurrentUser(), newPsd);
-        }catch (Exception e){
-            return ResultInfoUtil.buildError(OTHER_ERROR,"密码更新失败！",getCurrentUrl());
-        }
+        userService.resetPassword(getCurrentUser(), newPsd);
         return ResultInfoUtil.buildSuccess(getCurrentUrl());
     }
+
+    @PostMapping("/update")
+    public ResultInfo<Void> updateUserMobileOrEmail(
+            @RequestParam(value = "mobile", required = false) String mobile,
+            @RequestParam(value = "email", required = false) String email,
+            @RequestParam("verifyCode") String verifyCode) {
+
+        // 验证邮箱验证码
+        checkVerifyCode(verifyCode);
+        User userToUpdate = new User().withId(getCurrentUser().getId())
+                .withMobile(mobile)
+                .withEmail(email);
+        userService.updateById(userToUpdate);
+        return ResultInfoUtil.buildSuccess(getCurrentUrl());
+    }
+
+
 }

@@ -1,9 +1,11 @@
 package cn.sicnu.cs.employment.service.impl;
 
 import cn.sicnu.cs.employment.domain.entity.User;
+import cn.sicnu.cs.employment.exception.CustomException;
 import cn.sicnu.cs.employment.mapper.RoleMapper;
 import cn.sicnu.cs.employment.mapper.UserMapper;
 import cn.sicnu.cs.employment.service.IUserService;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -13,13 +15,12 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.NoSuchElementException;
 import java.util.Set;
 
-import static cn.sicnu.cs.employment.common.Constants.ROLE_ENTERPRISE;
-import static cn.sicnu.cs.employment.common.Constants.ROLE_PERSON;
+import static cn.sicnu.cs.employment.common.Constants.*;
 import static cn.sicnu.cs.employment.common.util.RequestUtil.getCurrentUser;
 
 @Service
 @RequiredArgsConstructor
-public class UserServiceImpl implements IUserService {
+public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IUserService {
 
     private final UserMapper userMapper;
     private final RoleMapper roleMapper;
@@ -71,17 +72,21 @@ public class UserServiceImpl implements IUserService {
     @Override
     @Transactional(rollbackFor = RuntimeException.class)
     public void resetPassword(User user, String newPassword) {
-        if (user.getId() == null) {
-            // 表示是通过找回密码【邮箱进入的此方法】
-            userMapper.findOptionalByEmail(user.getEmail()).ifPresent(
-                    // 添加id
-                    userEmail -> user.withEmail(userEmail.getEmail())
-            );
-        }
-        User userToUpdate = new User();
-        userToUpdate.withId(user.getId())
+        try {
+            if (user.getId() == null) {
+                // 表示是通过找回密码【邮箱进入的此方法】
+                userMapper.findOptionalByEmail(user.getEmail()).ifPresent(
+                        // 添加id
+                        userEmail -> user.withEmail(userEmail.getEmail())
+                );
+            }
+            User userToUpdate = new User();
+            userToUpdate.withId(user.getId())
                     .withPassword(passwordEncoder.encode(newPassword));
-        userMapper.updateById(userToUpdate);
+            userMapper.updateById(userToUpdate);
+        } catch (Exception e) {
+            throw new CustomException(ERROR_CODE, "更新密码出错！Exception:" + e.getMessage());
+        }
     }
 
     @Override
