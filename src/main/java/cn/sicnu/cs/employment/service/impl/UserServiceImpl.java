@@ -1,7 +1,6 @@
 package cn.sicnu.cs.employment.service.impl;
 
 import cn.sicnu.cs.employment.domain.entity.User;
-import cn.sicnu.cs.employment.exception.CustomException;
 import cn.sicnu.cs.employment.mapper.RoleMapper;
 import cn.sicnu.cs.employment.mapper.UserMapper;
 import cn.sicnu.cs.employment.service.IUserService;

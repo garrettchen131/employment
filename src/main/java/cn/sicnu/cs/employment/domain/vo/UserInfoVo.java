@@ -4,13 +4,23 @@ package cn.sicnu.cs.employment.domain.vo;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.With;
 
 import java.util.Date;
 
 @Data
+@With
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserInfoVo {
+
+    private String username; //账号
+
+    private String nickName; //昵称
+
+    private String mobile; //手机
+
+    private String email; //邮箱
 
     private String personName; //姓名
 
@@ -28,7 +38,7 @@ public class UserInfoVo {
 
     private String school;  //学校
 
-    private String schoolStart;  //入学年 月
+    private String schoolStart;  //入学年月
 
     private String schoolEnd; // 毕业年月
 

@@ -2,6 +2,7 @@ package cn.sicnu.cs.employment.rest;
 
 import cn.sicnu.cs.employment.common.ResultInfo;
 import cn.sicnu.cs.employment.common.ResultInfoUtil;
+import cn.sicnu.cs.employment.domain.entity.User;
 import cn.sicnu.cs.employment.domain.entity.UserInfo;
 import cn.sicnu.cs.employment.domain.vo.UserInfoVo;
 import cn.sicnu.cs.employment.service.IUserInfoService;
@@ -28,7 +29,6 @@ public class UserResource {
 
     @PostMapping("/info")
     public ResultInfo<Void> postUserInfo(@RequestBody UserInfoVo userInfoVo) {
-        System.out.println("===========userInfo=" + userInfoVo);
         val userInfo = new UserInfo();
         BeanUtils.copyProperties(userInfoVo, userInfo);
         userInfoService.addUserInfo(userInfo, getCurrentUser().getId());
@@ -37,11 +37,13 @@ public class UserResource {
 
     @GetMapping("/info")
     public ResultInfo<UserInfoVo> getUserInfo() {
-        val userInfo = userInfoService.getUserInfo(getCurrentUser().getId());
-        val password = getCurrentUser().getPassword();
-        log.info("user={}", password);
+        User currentUser = getCurrentUser();
+        val userInfo = userInfoService.getUserInfo(currentUser.getId());
         val userInfoVo = new UserInfoVo();
         BeanUtils.copyProperties(userInfo, userInfoVo);
+        userInfoVo.withUsername(currentUser.getUsername())
+                .withMobile(currentUser.getMobile())
+                .withEmail(currentUser.getEmail());
         return ResultInfoUtil.buildSuccess(getCurrentUrl(), userInfoVo);
     }
 

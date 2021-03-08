@@ -19,7 +19,7 @@ public class UserInfoServiceImpl implements IUserInfoService {
     @Override
     @Transactional(rollbackFor = RuntimeException.class)
     public void addUserInfo(UserInfo userInfo, Long userId) {
-        System.out.println(userInfo.getPersonName());
+//        System.out.println(userInfo.getPersonName());
         UserInfo info = userInfo.withUserId(userId);
         if (ObjectUtils.isEmpty(userInfoMapper.selectById(userId))) {
             userInfoMapper.insert(info);
