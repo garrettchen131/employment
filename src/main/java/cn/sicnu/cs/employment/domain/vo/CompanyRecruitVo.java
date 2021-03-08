@@ -12,9 +12,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class CompanyRecruitVo {
 
-    private Long id; //简历id
+    private Long   id; //简历id
 
-    private Long comId; //企业id
+    private Long   comId; //企业id
 
     private String manager; //招聘负责人
 

@@ -43,13 +43,11 @@ public class JwtFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        log.info("path={}",request.getServletPath());
+        log.info("path={}", request.getServletPath());
         var claimsOpt = Optional.ofNullable((Claims) null);
         if (checkJwtToken(request)) {
             claimsOpt = validateToken(request);
-            claimsOpt.filter(claims -> {
-                return Objects.nonNull(claims.get("authorities"));
-            })
+            claimsOpt.filter(claims -> Objects.nonNull(claims.get("authorities")))
                     .ifPresentOrElse(
                             this::setSpringAuthentication,
                             SecurityContextHolder::clearContext
@@ -60,7 +58,8 @@ public class JwtFilter extends OncePerRequestFilter {
             val userOpt = userMapper.findOptionalByUsername(un);
             userOpt.ifPresent(user -> request.setAttribute("user", user));
             if (userOpt.isPresent() && !userOpt.get().getStatus()) {
-                if (!"/user/info".equals(request.getServletPath())) {
+                if (!"/user/info".equals(request.getServletPath())
+                        || !"/com/info".equals(request.getServletPath())) {
                     writeStatusInfo(response);
                     return;
                 }
