@@ -1,13 +1,11 @@
 package cn.sicnu.cs.employment.domain.vo;
 
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
-@Builder
+@With
 @Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class CompanyRecruitVo {
@@ -39,7 +37,7 @@ public class CompanyRecruitVo {
     private String comName; //企业名称
 
     @Builder.Default
-    private String comStatus = "已上市"; //"已上市" “未上市”
+    private Integer comStatus = 1; //1-"已上市" 0-“未上市”
 
     private String website; //公司网址
 

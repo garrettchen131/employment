@@ -8,11 +8,11 @@ import java.util.stream.Collectors;
 public class CollectionUtil {
     public static TreeSet<? extends GrantedAuthority> toTreeSet(Collection<? extends GrantedAuthority> authorities) {
         return authorities.stream().collect(
-            Collectors.toCollection(
-                () -> new TreeSet<>(
-                    Comparator.comparing(GrantedAuthority::getAuthority)
+                Collectors.toCollection(
+                        () -> new TreeSet<>(
+                                Comparator.comparing(GrantedAuthority::getAuthority)
+                        )
                 )
-            )
         );
     }
 

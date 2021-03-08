@@ -35,4 +35,5 @@ public class UserInfoServiceImpl implements IUserInfoService {
     public UserInfo getUserInfo(Long userId) {
         return userInfoMapper.selectById(userId);
     }
+
 }

@@ -4,17 +4,14 @@ import cn.sicnu.cs.employment.common.Constants;
 import cn.sicnu.cs.employment.common.ResultInfo;
 import cn.sicnu.cs.employment.common.ResultInfoUtil;
 import cn.sicnu.cs.employment.domain.entity.User;
-import cn.sicnu.cs.employment.domain.entity.UserInfo;
 import cn.sicnu.cs.employment.domain.vo.UserVo;
-import cn.sicnu.cs.employment.exception.CustomException;
-import cn.sicnu.cs.employment.service.ISendMail;
+import cn.sicnu.cs.employment.service.ISendMailService;
 import cn.sicnu.cs.employment.service.IUserService;
 import com.google.code.kaptcha.impl.DefaultKaptcha;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.ui.context.support.UiApplicationContextUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.imageio.ImageIO;
@@ -37,7 +34,7 @@ public class AuthorizeResource {
 
     private final DefaultKaptcha defaultKaptcha;
     private final IUserService userService;
-    private final ISendMail sendMail;
+    private final ISendMailService sendMail;
 
     @PostMapping("/register")
     public ResultInfo<Void> register(@Valid @RequestBody UserVo userVo) {

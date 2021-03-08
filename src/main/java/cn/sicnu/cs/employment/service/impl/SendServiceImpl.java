@@ -1,10 +1,9 @@
 package cn.sicnu.cs.employment.service.impl;
 
 import cn.sicnu.cs.employment.exception.CustomException;
-import cn.sicnu.cs.employment.service.ISendMail;
+import cn.sicnu.cs.employment.service.ISendMailService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.MailSendException;
 import org.springframework.mail.SimpleMailMessage;
@@ -18,7 +17,7 @@ import static cn.sicnu.cs.employment.common.Constants.OTHER_ERROR;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class SendServiceImpl implements ISendMail {
+public class SendServiceImpl implements ISendMailService {
 
     private final JavaMailSenderImpl javaMailSender;
 

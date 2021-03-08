@@ -6,7 +6,7 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.*;
 
 @With
-@Setter
+@Data
 @Builder
 @ToString
 @NoArgsConstructor

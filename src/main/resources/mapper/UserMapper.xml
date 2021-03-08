@@ -61,6 +61,11 @@
         FROM `t_user`
         WHERE `email` = #{email}
     </select>
+    <select id="countByUserId" resultType="java.lang.Long">
+        SELECT COUNT(`id`)
+        FROM `t_user`
+        WHERE `id` = #{id}
+    </select>
     <update id="activeUser">
         UPDATE `t_user`
         SET `status` = true

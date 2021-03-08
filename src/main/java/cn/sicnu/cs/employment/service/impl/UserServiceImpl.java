@@ -20,7 +20,7 @@ import static cn.sicnu.cs.employment.common.util.RequestUtil.getCurrentUser;
 
 @Service
 @RequiredArgsConstructor
-public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IUserService {
+public class UserServiceImpl implements IUserService {
 
     private final UserMapper userMapper;
     private final RoleMapper roleMapper;
@@ -42,6 +42,11 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
     }
 
     @Override
+    public boolean isUserIdExisted(Long id) {
+        return userMapper.countByUserId(id) > 0;
+    }
+
+    @Override
     @Transactional(rollbackFor = RuntimeException.class)
     public void register(boolean isCom, User user) {
         String ROLE = isCom ? ROLE_ENTERPRISE : ROLE_PERSON;
@@ -59,15 +64,6 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
                         }
                 );
     }
-
-//    @Override
-//    public String getUsernameByEmail(String email) {
-//        if(userMapper.findOptionalByEmail(email).isPresent()){
-//            return userMapper.findOptionalByEmail(email).get().getUsername();
-//        } else {
-//            throw new NoSuchElementException("Cannot find User!");
-//        }
-//    }
 
     @Override
     @Transactional(rollbackFor = RuntimeException.class)
@@ -96,14 +92,10 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         userMapper.activeUser(id);
     }
 
-//    @Override
-//    public Long LoginByUsername(String username, String password) {
-//         return userMapper.findOptionalByUserNameAndPassword(username,password).get().getId();
-//    }
-//
-//    @Override
-//    public Long LoginByEmail(String email, String password) {
-//        return userMapper.findOptionalByEmailAndPassword(email,password).get().getId();
-//
-//    }
+    @Override
+    @Transactional(rollbackFor = RuntimeException.class)
+    public void updateById(User user) {
+        userMapper.updateById(user);
+    }
+
 }

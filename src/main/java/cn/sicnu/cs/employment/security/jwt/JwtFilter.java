@@ -59,7 +59,7 @@ public class JwtFilter extends OncePerRequestFilter {
             userOpt.ifPresent(user -> request.setAttribute("user", user));
             if (userOpt.isPresent() && !userOpt.get().getStatus()) {
                 if (!"/user/info".equals(request.getServletPath())
-                        || !"/com/info".equals(request.getServletPath())) {
+                        && !"/com/info".equals(request.getServletPath())) {
                     writeStatusInfo(response);
                     return;
                 }

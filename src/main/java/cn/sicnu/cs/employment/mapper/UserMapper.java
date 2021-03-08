@@ -17,6 +17,8 @@ public interface UserMapper extends BaseMapper<User> {
 
     long countByMobile(@Param("mobile") String mobile);
 
+    long countByUserId(@Param("id")Long id);
+
     Boolean findStatusByUsername(@Param("username") String username);
 
     Optional<User> findOptionalByUsername(@Param("username") String username);
@@ -24,6 +26,7 @@ public interface UserMapper extends BaseMapper<User> {
     Optional<User> findOptionalByEmail(@Param("email") String email);
 
     long activeUser(@Param("id") Long id);
+
 
 
     //Set<Role> findRolesByUserId(@Param("id") Long id);

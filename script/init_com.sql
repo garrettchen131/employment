@@ -18,7 +18,7 @@ CREATE TABLE `t_com_info`(
 
 DROP TABLE IF EXISTS `t_com_recruit`;
 CREATE TABLE `t_com_recruit`(
-                             `id` BIGINT(20) NOT NULL NOT NULL COMMENT '记录id',
+                             `id` BIGINT(20) NOT NULL NOT NULL PRIMARY KEY COMMENT '记录id',
                              `manager` Varchar(255) DEFAULT '' COMMENT '负责人',
                              `manager_status` VARCHAR(255) DEFAULT '' COMMENT '负责人职位',
                              `com_id` BIGINT (20) NOT NULL COMMENT '企业ID',

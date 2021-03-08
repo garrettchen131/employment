@@ -5,13 +5,15 @@ import com.baomidou.mybatisplus.extension.service.IService;
 
 import java.util.Optional;
 
-public interface IUserService extends IService<User> {
+public interface IUserService{
 
     boolean isUsernameExisted(String username);
 
     boolean isEmailExisted(String email);
 
     boolean isMobileExisted(String mobile);
+
+    boolean isUserIdExisted(Long id);
 
     void register(boolean isCom, User user);
 
@@ -21,4 +23,5 @@ public interface IUserService extends IService<User> {
 
     void activeUser(User user);
 
+    void updateById(User user);
 }

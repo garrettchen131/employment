@@ -2,7 +2,6 @@ package cn.sicnu.cs.employment.service;
 
 import org.springframework.mail.MailSendException;
 
-public interface ISendMail {
-
+public interface ISendMailService {
     String sendEmail(String receiver) throws MailSendException;
 }

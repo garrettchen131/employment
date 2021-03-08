@@ -23,7 +23,7 @@ public class CompanyInfoVo {
 
     private String manager; //公司负责人
 
-    private Integer status;  //公司状态（0-未上市；1-已上市）
+    private Integer status;  //公司状态（未上市；已上市）
 
     private String type; //公司类型
 
