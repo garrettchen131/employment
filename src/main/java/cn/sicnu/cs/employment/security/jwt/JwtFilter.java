@@ -43,21 +43,23 @@ public class JwtFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        log.info("path={}", request.getServletPath());
         var claimsOpt = Optional.ofNullable((Claims) null);
+        // if【存在符合要求的Token】
         if (checkJwtToken(request)) {
+            // 解析获取claims数据，无则null
             claimsOpt = validateToken(request);
+            // 过滤后获得存在 authorities 的claim，如果存在这样一个claim，则往下执行
             claimsOpt.filter(claims -> Objects.nonNull(claims.get("authorities")))
                     .ifPresentOrElse(
-                            this::setSpringAuthentication,
-                            SecurityContextHolder::clearContext
+                            this::setSpringAuthentication, // 将claim进行处理，将其中的authorities信息进行保存
+                            SecurityContextHolder::clearContext //TODO：清除？？不是才保存了吗？为什么又要清除
                     );
         }
-        if (claimsOpt.isPresent()) {
-            val un = claimsOpt.get().getSubject();
-            val userOpt = userMapper.findOptionalByUsername(un);
-            userOpt.ifPresent(user -> request.setAttribute("user", user));
-            if (userOpt.isPresent() && !userOpt.get().getStatus()) {
+        if (claimsOpt.isPresent()) { // 如果claim存在（即完成上面一个if中的代码）
+            val un = claimsOpt.get().getSubject();  // 获取用户名
+            val userOpt = userMapper.findOptionalByUsername(un);    // 通过claim中保存的用户名获取到用户的信息
+            userOpt.ifPresent(user -> request.setAttribute("user", user));  // 如果该用户存在，则保存在当前Request域中
+            if (userOpt.isPresent() && !userOpt.get().getStatus()) {    // 获取status，若为false则返回 "未激活"
                 if (!"/user/info".equals(request.getServletPath())
                         && !"/com/info".equals(request.getServletPath())) {
                     writeStatusInfo(response);
@@ -82,13 +84,20 @@ public class JwtFilter extends OncePerRequestFilter {
     }
 
     private boolean checkJwtToken(HttpServletRequest request) {
+        // 获取请求的 Header:Authorization Token进行验证
         val header = request.getHeader(appProperties.getJwt().getHeader());
+        // 判断条件【Token不为空 && 以"Bearer"开头】
         return Strings.isNotEmpty(header) && header.startsWith(appProperties.getJwt().getPrefix());
     }
 
+    /**
+     * 获取 Token 中的Claims中保存的信息，无则返回 empty()
+     */
     private Optional<Claims> validateToken(HttpServletRequest request) {
+        // 去掉Token中的 "Bearer" 字段
         val token = request.getHeader(appProperties.getJwt().getHeader()).replace(appProperties.getJwt().getPrefix(), "");
         try {
+            // 返回Token中的claims保存的信息
             return Optional.of(Jwts.parserBuilder().setSigningKey(jwtUtil.getKey()).build().parseClaimsJws(token).getBody());
         } catch (ExpiredJwtException | SignatureException | MalformedJwtException | UnsupportedJwtException | IllegalArgumentException e) {
             return Optional.empty();
@@ -96,12 +105,13 @@ public class JwtFilter extends OncePerRequestFilter {
     }
 
     private void setSpringAuthentication(Claims claims) {
+        // 获取 用户的authorities的List  //TODO：authorities是什么时候存在于header中的？
         val rawList = CollectionUtil.convertObjectToList(claims.get("authorities"));
         val authorities = rawList.stream()
-                .map(String::valueOf)
-                .map(SimpleGrantedAuthority::new)
-                .collect(Collectors.toList());
-        val authentication = new UsernamePasswordAuthenticationToken(claims.getSubject(), null, authorities);
-        SecurityContextHolder.getContext().setAuthentication(authentication);
+                .map(String::valueOf)    // 将List的元素转成字符串
+                .map(SimpleGrantedAuthority::new)   // 用List中的元素 new SimpleGrantedAuthority()
+                .collect(Collectors.toList());  // 再转成List  // 到这里即将 List中的所有元素转成 SimpleGrantedAuthority类型，用于保存
+        val authentication = new UsernamePasswordAuthenticationToken(claims.getSubject(), null, authorities); // （用户账号，null，用户权限）
+        SecurityContextHolder.getContext().setAuthentication(authentication);  // 保存用户的权限   //TODO：到这里完成了什么？
     }
 }

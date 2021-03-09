@@ -87,7 +87,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Bean
     public RestAuthenticationFilter restAuthenticationFilter() throws Exception {
-        val filter = new RestAuthenticationFilter(objectMapper);
+        val filter = new RestAuthenticationFilter(objectMapper);  //TODO：这是在设置身份验证的Filter吗？
         filter.setAuthenticationSuccessHandler(new RestAuthenticationSuccessHandler(jwtUtil));
         filter.setAuthenticationFailureHandler(new RestAuthenticationFailureHandler(objectMapper));
         filter.setAuthenticationManager(authenticationManager());

@@ -24,13 +24,19 @@ public class JwtUtil {
     private final Key refreshKey; // 用于签名 Refresh Token
     private final AppProperties appProperties;
 
+    // 将 appProperties进行解码
     public JwtUtil(AppProperties appProperties) {
-        this.appProperties = appProperties;
+        this.appProperties = appProperties;     // 获取appProperties中的Key，app中的Key从配置文件中获取
         key = new SecretKeySpec(Base64.getDecoder().decode(appProperties.getJwt().getKey()), "HmacSHA512");
         refreshKey = new SecretKeySpec(Base64.getDecoder().decode(appProperties.getJwt().getRefreshKey()), "HmacSHA512");
     }
 
 
+    /**
+     * 生成一个Token
+     * @param userDetails payLoad负载信息
+     * @param timeToExpire Token的有效期
+     */
     public String createJWTToken(UserDetails userDetails, long timeToExpire) {
         return createJWTToken(userDetails, timeToExpire, key);
     }
@@ -46,15 +52,15 @@ public class JwtUtil {
     public String createJWTToken(UserDetails userDetails, long timeToExpire, Key signKey) {
         return Jwts
             .builder()
-            .setId("sicnu")
-            .setSubject(userDetails.getUsername())
-            .claim("authorities",
-                userDetails.getAuthorities().stream()
-                    .map(GrantedAuthority::getAuthority)
-                    .collect(Collectors.toList()))
-            .setIssuedAt(new Date(System.currentTimeMillis()))
-            .setExpiration(new Date(System.currentTimeMillis() + timeToExpire))
-            .signWith(signKey, SignatureAlgorithm.HS512).compact();
+            .setId("sicnu")     // id：登录用户id？
+            .setSubject(userDetails.getUsername())      // subject：表示签名所面向的用户，即用户名
+            .claim("authorities",             // claim :设置自保存信息
+                userDetails.getAuthorities().stream()       // 录入"authorities"权限
+                    .map(GrantedAuthority::getAuthority)        // 从 JWTFilter的 this::setSpringAuthentication 后中获取用户权限
+                    .collect(Collectors.toList()))              // 将其转成 List
+            .setIssuedAt(new Date(System.currentTimeMillis()))      // 表示在什么时候签发的Token
+            .setExpiration(new Date(System.currentTimeMillis() + timeToExpire))     // 设置过期时间
+            .signWith(signKey, SignatureAlgorithm.HS512).compact();         // 签名
     }
 
     public String createAccessToken(UserDetails userDetails) {
@@ -73,12 +79,15 @@ public class JwtUtil {
         return validateToken(jwtToken, refreshKey);
     }
 
+    /**
+     * 返回Token是否有效
+     */
     public boolean validateToken(String jwtToken, Key signKey) {
         return parseClaims(jwtToken, signKey).isPresent();
     }
 
     public String buildAccessTokenWithRefreshToken(String jwtToken) {
-        return parseClaims(jwtToken, refreshKey)
+        return parseClaims(jwtToken, refreshKey)    //TODO：这是在通过refresh_Token创建新的Token吗？为啥不继续用Token创建
             .map(claims -> Jwts.builder()
                 .setClaims(claims)
                 .setExpiration(new Date(System.currentTimeMillis() + appProperties.getJwt().getAccessTokenExpireTime()))
@@ -86,10 +95,19 @@ public class JwtUtil {
             .orElseThrow();
     }
 
+    /**
+     * 解析验证Token
+     * @param jwtToken 接收的Token
+     * @param signKey  签名
+     * @return 保存的信息（claims）
+     */
     public Optional<Claims> parseClaims(String jwtToken, Key signKey) {
         return Optional.ofNullable(Jwts.parserBuilder().setSigningKey(signKey).build().parseClaimsJws(jwtToken).getBody());
     }
 
+    /**
+     * 不检查是否过期（验证Token是否有效）
+     */
     public boolean validateWithoutExpiration(String jwtToken) {
         try {
             Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(jwtToken);
@@ -110,6 +128,9 @@ public class JwtUtil {
         return refreshKey;
     }
 
+    /**
+     * 设置Token的Cookie用于返回给前端
+     */
     public void setCookiesForTokens(HttpServletResponse res, UserDetails user) {
         val accessToken = createAccessToken(user);
         val refreshToken = createRefreshToken(user);

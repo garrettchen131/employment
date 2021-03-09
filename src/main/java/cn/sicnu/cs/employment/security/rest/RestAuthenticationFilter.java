@@ -20,6 +20,7 @@ public class RestAuthenticationFilter extends UsernamePasswordAuthenticationFilt
     private final ObjectMapper objectMapper;
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
+        // 获取传入的username和password
         try (InputStream inputStream = request.getInputStream()) {
             val jsonNode = objectMapper.readTree(inputStream);
             if (!jsonNode.has("username") || !jsonNode.has("password")) {
@@ -27,9 +28,9 @@ public class RestAuthenticationFilter extends UsernamePasswordAuthenticationFilt
             }
             val username = jsonNode.get("username").textValue();
             val password = jsonNode.get("password").textValue();
-            UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(username, password);
-            setDetails(request, token);
-            return this.getAuthenticationManager().authenticate(token);
+            UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(username, password); //TODO：通过账号和密码构造一个Token（和JWTFilter:114有什么区别
+            setDetails(request, token);  // TODO：这是在干啥？将token放入Request吗？
+            return this.getAuthenticationManager().authenticate(token); // TODO： 进行身份验证然后返回一个认证对象？什么意思
         } catch (IOException e) {
             throw new BadCredentialsException("没有找到用户名或密码参数");
         }

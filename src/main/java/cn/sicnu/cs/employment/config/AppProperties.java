@@ -10,7 +10,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.Min;
 
 @Configuration
-@ConfigurationProperties("app")
+@ConfigurationProperties("app") //属性绑定
 public class AppProperties {
 
     @Getter
