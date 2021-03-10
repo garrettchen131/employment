@@ -21,7 +21,7 @@ public class RestAuthenticationSuccessHandler implements AuthenticationSuccessHa
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException {
-        val user = (User) authentication.getPrincipal(); //TODO：这里保存的Principle不是username吗？（JWTUtil:56，JWTFilter：114 ）
+        val user = (User) authentication.getPrincipal();
         jwtUtil.setCookiesForTokens(response, user);  // 返回带有Token的Cookie
         if (user.getStatus()) {
             response.setStatus(HttpStatus.OK.value());

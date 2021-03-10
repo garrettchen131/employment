@@ -31,7 +31,6 @@ public class JwtUtil {
         refreshKey = new SecretKeySpec(Base64.getDecoder().decode(appProperties.getJwt().getRefreshKey()), "HmacSHA512");
     }
 
-
     /**
      * 生成一个Token
      * @param userDetails payLoad负载信息
@@ -87,7 +86,7 @@ public class JwtUtil {
     }
 
     public String buildAccessTokenWithRefreshToken(String jwtToken) {
-        return parseClaims(jwtToken, refreshKey)    //TODO：这是在通过refresh_Token创建新的Token吗？为啥不继续用Token创建
+        return parseClaims(jwtToken, refreshKey)
             .map(claims -> Jwts.builder()
                 .setClaims(claims)
                 .setExpiration(new Date(System.currentTimeMillis() + appProperties.getJwt().getAccessTokenExpireTime()))

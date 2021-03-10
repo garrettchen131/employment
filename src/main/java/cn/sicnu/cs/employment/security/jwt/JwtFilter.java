@@ -48,11 +48,10 @@ public class JwtFilter extends OncePerRequestFilter {
         if (checkJwtToken(request)) {
             // 解析获取claims数据，无则null
             claimsOpt = validateToken(request);
-            // 过滤后获得存在 authorities 的claim，如果存在这样一个claim，则往下执行
             claimsOpt.filter(claims -> Objects.nonNull(claims.get("authorities")))
                     .ifPresentOrElse(
                             this::setSpringAuthentication, // 将claim进行处理，将其中的authorities信息进行保存
-                            SecurityContextHolder::clearContext //TODO：清除？？不是才保存了吗？为什么又要清除
+                            SecurityContextHolder::clearContext
                     );
         }
         if (claimsOpt.isPresent()) { // 如果claim存在（即完成上面一个if中的代码）
@@ -100,18 +99,19 @@ public class JwtFilter extends OncePerRequestFilter {
             // 返回Token中的claims保存的信息
             return Optional.of(Jwts.parserBuilder().setSigningKey(jwtUtil.getKey()).build().parseClaimsJws(token).getBody());
         } catch (ExpiredJwtException | SignatureException | MalformedJwtException | UnsupportedJwtException | IllegalArgumentException e) {
+            //if (e instanceof ExpiredJwtException)
             return Optional.empty();
         }
     }
 
     private void setSpringAuthentication(Claims claims) {
-        // 获取 用户的authorities的List  //TODO：authorities是什么时候存在于header中的？
+        // 获取 用户的authorities的List
         val rawList = CollectionUtil.convertObjectToList(claims.get("authorities"));
         val authorities = rawList.stream()
                 .map(String::valueOf)    // 将List的元素转成字符串
                 .map(SimpleGrantedAuthority::new)   // 用List中的元素 new SimpleGrantedAuthority()
                 .collect(Collectors.toList());  // 再转成List  // 到这里即将 List中的所有元素转成 SimpleGrantedAuthority类型，用于保存
         val authentication = new UsernamePasswordAuthenticationToken(claims.getSubject(), null, authorities); // （用户账号，null，用户权限）
-        SecurityContextHolder.getContext().setAuthentication(authentication);  // 保存用户的权限   //TODO：到这里完成了什么？
+        SecurityContextHolder.getContext().setAuthentication(authentication);  // 保存用户的权限
     }
 }
