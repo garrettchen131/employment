@@ -95,4 +95,15 @@ public class CompanyRecruitResource {
         List<CompanyRecruitVo> recruitVos = BeanConvertUtils.convertListTo(recruits, CompanyRecruitVo::new);
         return ResultInfoUtil.buildSuccess(getCurrentUrl(), recruitVos);
     }
+
+    @GetMapping("/all")
+    public ResultInfo<List<CompanyRecruitVo>> getAllCompanyRecruit(){
+        List<CompanyRecruit> recruits = recruitService.getAll();
+        List<CompanyRecruitVo> recruitVos = BeanConvertUtils.convertListTo(recruits, CompanyRecruitVo::new);
+        // 添加comName
+        for (CompanyRecruitVo recruitVo : recruitVos) {
+            recruitVo.setComName(infoService.getComNameById(recruitVo.getComId()));
+        }
+        return ResultInfoUtil.buildSuccess(getCurrentUrl(), recruitVos);
+    }
 }

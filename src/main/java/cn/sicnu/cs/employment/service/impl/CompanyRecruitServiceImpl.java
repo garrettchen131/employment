@@ -45,4 +45,9 @@ public class CompanyRecruitServiceImpl implements ICompanyRecruitService {
     public void save(CompanyRecruit recruit) {
         recruitMapper.insert(recruit);
     }
+
+    @Override
+    public List<CompanyRecruit> getAll() {
+        return recruitMapper.selectList(null);
+    }
 }

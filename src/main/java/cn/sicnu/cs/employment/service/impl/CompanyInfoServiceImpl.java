@@ -32,4 +32,9 @@ public class CompanyInfoServiceImpl implements ICompanyInfoService {
     public CompanyInfo getCompanyInfo(Long comId) {
         return companyInfoMapper.selectById(comId);
     }
+
+    @Override
+    public String getComNameById(Long comId) {
+        return companyInfoMapper.selectComNameById(comId);
+    }
 }

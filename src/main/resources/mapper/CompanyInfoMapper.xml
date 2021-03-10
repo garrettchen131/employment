@@ -4,5 +4,9 @@
 <mapper namespace="cn.sicnu.cs.employment.mapper.CompanyInfoMapper">
 
 
-
+    <select id="selectComNameById" resultType="java.lang.String">
+        SELECT `com_name`
+        FROM `t_com_info`
+        WHERE `com_id` = #{id}
+    </select>
 </mapper>

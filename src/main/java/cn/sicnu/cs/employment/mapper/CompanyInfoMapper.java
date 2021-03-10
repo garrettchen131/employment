@@ -7,4 +7,5 @@ import org.apache.ibatis.annotations.Mapper;
 @Mapper
 public interface CompanyInfoMapper extends BaseMapper<CompanyInfo> {
 
+    String selectComNameById(Long id);
 }

@@ -9,4 +9,6 @@ public interface ICompanyInfoService {
     void addCompanyInfo(CompanyInfo companyInfo, Long userId);
 
     CompanyInfo getCompanyInfo(Long userId);
+
+    String getComNameById(Long comId);
 }

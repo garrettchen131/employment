@@ -19,4 +19,6 @@ public interface ICompanyRecruitService{
     List<CompanyRecruit> listByComId(Long comId);
 
     void save(CompanyRecruit recruit);
+
+    List<CompanyRecruit> getAll();
 }
