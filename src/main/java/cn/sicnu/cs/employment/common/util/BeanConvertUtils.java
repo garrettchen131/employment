@@ -1,5 +1,7 @@
 package cn.sicnu.cs.employment.common.util;
 
+import cn.sicnu.cs.employment.domain.entity.CompanyRecruit;
+import cn.sicnu.cs.employment.domain.vo.CompanyRecruitVo;
 import org.apache.logging.log4j.util.Supplier;
 import org.springframework.beans.BeanUtils;
 
@@ -29,7 +31,6 @@ public class BeanConvertUtils extends BeanUtils {
         if (null == source || null == targetSupplier) {
             return null;
         }
-
         T target = targetSupplier.get();
         copyProperties(source, target);
         if (callBack != null) {
@@ -78,5 +79,12 @@ public class BeanConvertUtils extends BeanUtils {
     @FunctionalInterface
     public interface ConvertCallBack<S, T> {
         void callBack(S t, T s);
+    }
+
+    public static String[] toArray(String str){
+        if (str.length() <= 2){
+            return null;
+        }
+        return str.substring(1,str.length()-1).split(",");
     }
 }

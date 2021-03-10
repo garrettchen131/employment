@@ -40,4 +40,6 @@ public class CompanyRecruit {
 
     private Integer status; //招聘信息状态（0-未发布；1-已发布)
 
+    private String welfare; //福利政策（五险一金。全勤）
+
 }

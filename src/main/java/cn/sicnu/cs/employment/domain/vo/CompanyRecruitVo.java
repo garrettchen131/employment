@@ -3,6 +3,10 @@ package cn.sicnu.cs.employment.domain.vo;
 
 import lombok.*;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+
 @With
 @Data
 @Builder
@@ -42,5 +46,8 @@ public class CompanyRecruitVo {
     private String website; //公司网址
 
     private String detail; //公司简介
+
+    // Vo
+    private String[] welfare; //福利政策（五险一金。全勤）
 
 }
