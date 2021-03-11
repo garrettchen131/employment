@@ -25,8 +25,9 @@ public interface UserMapper extends BaseMapper<User> {
 
     Optional<User> findOptionalByEmail(@Param("email") String email);
 
-    long activeUser(@Param("id") Long id);
+    void activeUser(@Param("id") Long id);
 
+    String selectHeadImg(@Param("id") Long id);
 
 
     //Set<Role> findRolesByUserId(@Param("id") Long id);

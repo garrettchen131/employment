@@ -4,5 +4,14 @@
 <mapper namespace="cn.sicnu.cs.employment.mapper.UserInfoMapper">
 
 
-
+    <update id="updateHeadImg">
+        update `t_user_info`
+        SET `head_img` = #{path}
+        WHERE `user_id` = #{id}
+    </update>
+    <select id="selectHeadImg" resultType="java.lang.String">
+        SELECT `head_img`
+        FROM `t_user_info`
+        WHERE `user_id` = #{id}
+    </select>
 </mapper>

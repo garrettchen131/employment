@@ -26,8 +26,13 @@ public class Constants {
     public static final int MOBILE_EXISTED = -2;
     public static final int TIME_OUT = -3;
     public static final int PASSWORD_ERROR = -4;
+    public static final int INPUT_EMPTY = -5;
+
+
     // 其他错误
     public static final int OTHER_ERROR = -9;
+    public static final int SAVED_ERROR = -98;
     public static final int USER_INPUT_ERROR = -99;
+
 
 }

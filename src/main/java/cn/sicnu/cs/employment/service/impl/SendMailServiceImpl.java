@@ -17,7 +17,7 @@ import static cn.sicnu.cs.employment.common.Constants.OTHER_ERROR;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class SendServiceImpl implements ISendMailService {
+public class SendMailServiceImpl implements ISendMailService {
 
     private final JavaMailSenderImpl javaMailSender;
 

@@ -70,4 +70,5 @@ public class UserInfoVo {
 
     private String projectEx;  //项目经历
 
+    private String headImg;  //头像链接
 }
