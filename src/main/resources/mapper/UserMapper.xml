@@ -66,6 +66,11 @@
         FROM `t_user`
         WHERE `id` = #{id}
     </select>
+    <select id="selectIdByUsername" resultType="java.lang.Long">
+        SELECT `id`
+        FROM `t_user`
+        WHERE `username` = #{username}
+    </select>
     <update id="activeUser">
         UPDATE `t_user`
         SET `status` = true

@@ -2,14 +2,12 @@ package cn.sicnu.cs.employment.service.impl;
 
 import cn.sicnu.cs.employment.domain.entity.Role;
 import cn.sicnu.cs.employment.domain.entity.User;
-import cn.sicnu.cs.employment.domain.entity.UserInfo;
 import cn.sicnu.cs.employment.exception.CustomException;
 import cn.sicnu.cs.employment.mapper.RoleMapper;
-import cn.sicnu.cs.employment.mapper.UserInfoMapper;
 import cn.sicnu.cs.employment.mapper.UserMapper;
+import cn.sicnu.cs.employment.service.ICompanyInfoService;
 import cn.sicnu.cs.employment.service.IUserInfoService;
 import cn.sicnu.cs.employment.service.IUserService;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -20,7 +18,6 @@ import java.util.NoSuchElementException;
 import java.util.Set;
 
 import static cn.sicnu.cs.employment.common.Constants.*;
-import static cn.sicnu.cs.employment.common.util.RequestUtil.getCurrentUser;
 
 @Service
 @RequiredArgsConstructor
@@ -28,6 +25,7 @@ public class UserServiceImpl implements IUserService {
 
     private final UserMapper userMapper;
     private final IUserInfoService userInfoService;
+    private final ICompanyInfoService companyInfoService;
     private final RoleMapper roleMapper;
     private final PasswordEncoder passwordEncoder;
 
@@ -53,7 +51,7 @@ public class UserServiceImpl implements IUserService {
 
     @Override
     @Transactional(rollbackFor = RuntimeException.class)
-    public void register( User user) {
+    public void register(User user) {
         roleMapper.findOptionalByAuthority(ROLE_PERSON)
                 .ifPresentOrElse(
                         role -> {
@@ -104,11 +102,21 @@ public class UserServiceImpl implements IUserService {
                         }
                 );
         userMapper.activeUser(user.getId());
-        if (!userInfoService.isUserInfoExsisted(user.getId())) {
-            // 不存在则新建空信息
-            userInfoService.addUserInfo(null, user.getId());
+        if (ROLE_PERSON.equals(role)) {
+        // 认证普通用户
+            if (!userInfoService.isUserInfoExsisted(user.getId())) {
+                // 不存在则新建空信息
+                userInfoService.addUserInfo(null, user.getId());
+            } else {
+                //TODO： 将用户账号与用户信息 user_info 进行绑定
+            }
+        } else if(ROLE_ENTERPRISE_SUPER.equals(role) || ROLE_UNIVERSITY_SUPER.equals(role)){
+            // 认证超级管理员，需要新增企业信息
+            if (!companyInfoService.isComInfoExisted(user.getId())){
+                companyInfoService.addCompanyInfo(null, user.getId());
+            }
         } else {
-            //TODO： 将用户账号与用户信息 user_info 进行绑定
+            throw new CustomException(OTHER_ERROR, "认证失败！请联系超级管理员授权账号");
         }
     }
 
@@ -116,6 +124,11 @@ public class UserServiceImpl implements IUserService {
     @Transactional(rollbackFor = RuntimeException.class)
     public void updateById(User user) {
         userMapper.updateById(user);
+    }
+
+    @Override
+    public Long getUserIdByUsername(String username) {
+        return userMapper.selectIdByUsername(username);
     }
 
 

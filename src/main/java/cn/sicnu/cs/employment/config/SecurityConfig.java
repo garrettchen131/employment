@@ -31,6 +31,9 @@ import org.zalando.problem.spring.web.advice.security.SecurityProblemSupport;
 import java.util.Arrays;
 import java.util.Collections;
 
+import static cn.sicnu.cs.employment.common.Constants.ROLE_ENTERPRISE_SUPER;
+import static cn.sicnu.cs.employment.common.Constants.ROLE_UNIVERSITY_SUPER;
+
 @Configuration
 @RequiredArgsConstructor
 @Import(SecurityProblemSupport.class)
@@ -58,6 +61,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests(authentication ->
                         authentication
                                 .mvcMatchers("/", "/auth/**").permitAll()
+                                .mvcMatchers("/admin/**").hasAnyAuthority(ROLE_UNIVERSITY_SUPER,ROLE_ENTERPRISE_SUPER)
 
                                 .anyRequest().authenticated())
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
@@ -88,7 +92,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
     public RestAuthenticationFilter restAuthenticationFilter() throws Exception {
         val filter = new RestAuthenticationFilter(objectMapper);
-        filter.setAuthenticationSuccessHandler(new RestAuthenticationSuccessHandler(jwtUtil));
+        filter.setAuthenticationSuccessHandler(new RestAuthenticationSuccessHandler(jwtUtil,objectMapper));
         filter.setAuthenticationFailureHandler(new RestAuthenticationFailureHandler(objectMapper));
         filter.setAuthenticationManager(authenticationManager());
         filter.setFilterProcessesUrl("/login");

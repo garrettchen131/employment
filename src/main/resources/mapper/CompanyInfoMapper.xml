@@ -9,4 +9,9 @@
         FROM `t_com_info`
         WHERE `com_id` = #{id}
     </select>
+    <select id="countComById" resultType="java.lang.Long">
+        SELECT COUNT (`com_id`)
+        FROM `t_com_info`
+        WHEN `com_id` = #{id}
+    </select>
 </mapper>

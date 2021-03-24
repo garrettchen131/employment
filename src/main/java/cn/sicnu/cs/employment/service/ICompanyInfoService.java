@@ -11,4 +11,6 @@ public interface ICompanyInfoService {
     CompanyInfo getCompanyInfo(Long userId);
 
     String getComNameById(Long comId);
+
+    boolean isComInfoExisted(Long id);
 }

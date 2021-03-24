@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.sicnu.cs.employment.mapper.AdminRoleMapper">
+    <insert id="insertRole">
+        INSERT INTO `t_admin_role`(`admin_id`, `role_id`)
+        VALUES (#{adminID}, #{roleId})
+    </insert>
+    <delete id="deleteRole">
+        DELETE FROM `t_admin_role`
+        WHERE `admin_id`=#{adminId} AND `role_id`=#{roleId}
+    </delete>
+
+
+    <select id="getAdminById" resultType="java.lang.Long">
+        SELECT `admin_id`
+        FROM `t_admin_role`
+        WHERE `role_id` = #{id}
+    </select>
+    <select id="listRolesByAdminId" resultType="cn.sicnu.cs.employment.domain.entity.User">
+        SELECT u.`username`, u.`email`, u.`mobile`
+        FROM `t_user` u
+        RIGHT JOIN `t_admin_role` a
+        ON u.`id` = a.`role_id`
+        WHERE a.`admin_id` = #{adminId};
+    </select>
+</mapper>

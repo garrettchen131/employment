@@ -24,13 +24,6 @@ public class CompanyResource {
 
     private final ICompanyInfoService companyInfoService;
 
-    @PostMapping("/info")
-    public ResultInfo<Void> postCompanyInfo(@RequestBody CompanyInfoVo companyInfoVo) {
-        val companyInfo = new CompanyInfo();
-        BeanUtils.copyProperties(companyInfoVo, companyInfo);
-        companyInfoService.addCompanyInfo(companyInfo, getCurrentUser().getId());
-        return ResultInfoUtil.buildSuccess(getCurrentUrl());
-    }
 
     @GetMapping("/info")
     public ResultInfo<CompanyInfoVo> getCompanyInfo() {

@@ -27,6 +27,8 @@ public interface UserMapper extends BaseMapper<User> {
 
     void activeUser(@Param("id") Long id);
 
+    Long selectIdByUsername(@Param("username") String username);
+
 //    String selectHeadImg(@Param("id") Long id);
 
 

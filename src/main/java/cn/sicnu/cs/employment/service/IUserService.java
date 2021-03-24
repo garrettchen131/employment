@@ -24,4 +24,6 @@ public interface IUserService{
     void activeUser(User user, String role);
 
     void updateById(User user);
+
+    Long getUserIdByUsername(String username);
 }

@@ -118,6 +118,7 @@ public class UserResource {
         //TODO 用户认证相关代码，目前恒返回成功
         //TODO 用户认证成功后，将用户账号与 user_info 绑定
 
+
         userService.activeUser(getCurrentUser(), role);
         return ResultInfoUtil.buildSuccess(getCurrentUrl());
     }
