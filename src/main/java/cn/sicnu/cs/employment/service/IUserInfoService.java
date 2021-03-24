@@ -10,4 +10,6 @@ public interface IUserInfoService {
     void updateUserHeadImg(Long userId, String path);
 
     String getHeadImg(Long id);
+
+    boolean isUserInfoExsisted(Long userId);
 }

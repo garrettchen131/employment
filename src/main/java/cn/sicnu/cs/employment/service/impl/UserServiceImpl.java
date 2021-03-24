@@ -1,9 +1,13 @@
 package cn.sicnu.cs.employment.service.impl;
 
+import cn.sicnu.cs.employment.domain.entity.Role;
 import cn.sicnu.cs.employment.domain.entity.User;
+import cn.sicnu.cs.employment.domain.entity.UserInfo;
 import cn.sicnu.cs.employment.exception.CustomException;
 import cn.sicnu.cs.employment.mapper.RoleMapper;
+import cn.sicnu.cs.employment.mapper.UserInfoMapper;
 import cn.sicnu.cs.employment.mapper.UserMapper;
+import cn.sicnu.cs.employment.service.IUserInfoService;
 import cn.sicnu.cs.employment.service.IUserService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +27,7 @@ import static cn.sicnu.cs.employment.common.util.RequestUtil.getCurrentUser;
 public class UserServiceImpl implements IUserService {
 
     private final UserMapper userMapper;
+    private final IUserInfoService userInfoService;
     private final RoleMapper roleMapper;
     private final PasswordEncoder passwordEncoder;
 
@@ -48,9 +53,8 @@ public class UserServiceImpl implements IUserService {
 
     @Override
     @Transactional(rollbackFor = RuntimeException.class)
-    public void register(boolean isCom, User user) {
-        String ROLE = isCom ? ROLE_ENTERPRISE : ROLE_PERSON;
-        roleMapper.findOptionalByAuthority(ROLE)
+    public void register( User user) {
+        roleMapper.findOptionalByAuthority(ROLE_PERSON)
                 .ifPresentOrElse(
                         role -> {
                             val userToSave = user
@@ -87,9 +91,25 @@ public class UserServiceImpl implements IUserService {
 
     @Override
     @Transactional(rollbackFor = RuntimeException.class)
-    public void activeUser(User user) {
-        Long id = getCurrentUser().getId();
-        userMapper.activeUser(id);
+    public void activeUser(User user, String role) {
+        roleMapper.findOptionalByAuthority(role)
+                .ifPresentOrElse(
+                        roleToAdd -> {
+                            Set<Role> authorities = user.getAuthorities();
+                            authorities.add(roleToAdd);
+                            roleMapper.addUserRole(user.getId(), roleToAdd.getId());
+                        },
+                        () -> {
+                            throw new NoSuchElementException("Cannot find role!");
+                        }
+                );
+        userMapper.activeUser(user.getId());
+        if (!userInfoService.isUserInfoExsisted(user.getId())) {
+            // 不存在则新建空信息
+            userInfoService.addUserInfo(null, user.getId());
+        } else {
+            //TODO： 将用户账号与用户信息 user_info 进行绑定
+        }
     }
 
     @Override

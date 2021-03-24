@@ -37,5 +37,5 @@ public class ResumeRecruitVo {
 
     private String request; //投递需求
 
-    private String[] detail; // 投递要求[数组]  //TODO 这个是啥？？？哪儿来的？
+    private String[] detail; // 投递要求[数组]
 }

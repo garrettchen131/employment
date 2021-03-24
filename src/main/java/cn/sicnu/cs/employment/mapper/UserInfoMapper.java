@@ -11,4 +11,6 @@ public interface UserInfoMapper extends BaseMapper<UserInfo> {
     int updateHeadImg(@Param("id") Long userId, @Param("path") String path);
 
     String selectHeadImg(@Param("id") Long id);
+
+    long countByUserId(@Param("userid")Long userId);
 }

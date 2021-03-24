@@ -43,3 +43,9 @@ spring:
   #        min-idle: 0 #最小空闲连接
   #    connect-timeout: 30000 #连接超时时间（毫秒）
   #Matser的ip地址
+
+qiniu:
+  accessKey: ${QINIU_ACCESS_KEY}
+  secretKey: ${QINIU_SECRET_KEY}
+  bucket:
+  path: ${QINIU_PATH}

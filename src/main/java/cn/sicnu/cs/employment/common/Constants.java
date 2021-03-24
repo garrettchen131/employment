@@ -5,8 +5,10 @@ public class Constants {
     public static final String PROBLEM_BASE_URI = "https://sicnu.cn";
 
     public static final String ROLE_PERSON = "ROLE_PERSON";
-
     public static final String ROLE_ENTERPRISE = "ROLE_ENTERPRISE";
+    public static final String ROLE_ENTERPRISE_SUPER = "ROLE_ENTERPRISE_SUPER";
+    public static final String ROLE_UNIVERSITY = "ROLE_UNIVERSITY";
+    public static final String ROLE_UNIVERSITY_SUPER = "ROLE_UNIVERSITY_SUPER";
 
     // 成功
     public static final int SUCCESS_CODE = 1;
@@ -28,11 +30,14 @@ public class Constants {
     public static final int PASSWORD_ERROR = -4;
     public static final int INPUT_EMPTY = -5;
 
-
     // 其他错误
     public static final int OTHER_ERROR = -9;
     public static final int SAVED_ERROR = -98;
     public static final int USER_INPUT_ERROR = -99;
+
+
+
+    public static final String PREFIX_HEAD_IMG = "head_img_";
 
 
 }

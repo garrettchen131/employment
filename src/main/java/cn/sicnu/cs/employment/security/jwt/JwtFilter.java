@@ -59,8 +59,7 @@ public class JwtFilter extends OncePerRequestFilter {
             val userOpt = userMapper.findOptionalByUsername(un);    // 通过claim中保存的用户名获取到用户的信息
             userOpt.ifPresent(user -> request.setAttribute("user", user));  // 如果该用户存在，则保存在当前Request域中
             if (userOpt.isPresent() && !userOpt.get().getStatus()) {    // 获取status，若为false则返回 "未激活"
-                if (!"/user/info".equals(request.getServletPath())
-                        && !"/com/info".equals(request.getServletPath())) {
+                if (!"/user/auth".equals(request.getServletPath())){
                     writeStatusInfo(response);
                     return;
                 }

@@ -13,6 +13,7 @@ import lombok.*;
 @AllArgsConstructor
 @EqualsAndHashCode
 @TableName(value = "t_com_info")
+@Deprecated
 public class CompanyInfo {
 
     @TableId(type = IdType.INPUT)

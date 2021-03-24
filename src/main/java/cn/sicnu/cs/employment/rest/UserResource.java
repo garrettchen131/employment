@@ -2,6 +2,8 @@ package cn.sicnu.cs.employment.rest;
 
 import cn.sicnu.cs.employment.common.ResultInfo;
 import cn.sicnu.cs.employment.common.ResultInfoUtil;
+import cn.sicnu.cs.employment.common.util.KaptchaUtil;
+import cn.sicnu.cs.employment.service.ISendMailService;
 import cn.sicnu.cs.employment.service.IUploadService;
 import cn.sicnu.cs.employment.domain.entity.User;
 import cn.sicnu.cs.employment.domain.entity.UserInfo;
@@ -30,6 +32,7 @@ public class UserResource {
     private final IUserInfoService userInfoService;
     private final IUserService userService;
     private final IUploadService uploadService;
+    private final ISendMailService sendMailService;
 
     @PostMapping("/info")
     public ResultInfo<Void> postUserInfo(@RequestBody UserInfoVo userInfoVo) {
@@ -71,7 +74,10 @@ public class UserResource {
             @RequestParam("verifyCode") String verifyCode) {
 
         // 验证邮箱验证码
-        checkVerifyCode(verifyCode);
+        boolean check = sendMailService.checkVerifyCode(verifyCode);
+        if (! check) {
+            return ResultInfoUtil.buildError(OTHER_ERROR, "邮箱验证码错误或已过期", getCurrentUrl());
+        }
         User userToUpdate = new User().withId(getCurrentUser().getId())
                 .withMobile(mobile)
                 .withEmail(email);
@@ -87,7 +93,7 @@ public class UserResource {
         try {
             FileInputStream fileIn = (FileInputStream) file.getInputStream();
             // 用来获取其他参数
-            String fileSaveName = "head_img_" + getCurrentUser().getUsername();
+            String fileSaveName = PREFIX_HEAD_IMG + getCurrentUser().getUsername();
             String path = uploadService.uploadImg(fileIn, fileSaveName);
             userInfoService.updateUserHeadImg(getCurrentUser().getId(), path);
             log.info("保存的图片地址={}", path);
@@ -105,5 +111,14 @@ public class UserResource {
             return ResultInfoUtil.buildError(SAVED_ERROR, "用户暂未设置头像！",getCurrentUrl());
         }
         return ResultInfoUtil.buildSuccess(getCurrentUrl(),headImg);
+    }
+
+    @PostMapping("/auth")
+    public ResultInfo<Void> authenticationUser(@RequestParam("role") String role){
+        //TODO 用户认证相关代码，目前恒返回成功
+        //TODO 用户认证成功后，将用户账号与 user_info 绑定
+
+        userService.activeUser(getCurrentUser(), role);
+        return ResultInfoUtil.buildSuccess(getCurrentUrl());
     }
 }

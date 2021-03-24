@@ -12,6 +12,7 @@ import javax.validation.constraints.NotNull;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Deprecated
 public class CompanyInfoVo {
 
     @NotNull(message = "公司名称不能为空")

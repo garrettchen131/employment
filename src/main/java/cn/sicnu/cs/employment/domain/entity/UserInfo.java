@@ -14,8 +14,10 @@ import lombok.*;
 @TableName("t_user_info")
 public class UserInfo {
 
-    @TableId(type = IdType.INPUT)
-    private Long userId;
+    @TableId(type = IdType.AUTO)
+    private Long id; //用户真正的信息id
+
+    private Long userId;  // 绑定用户账号的id
 
     private String personName; //姓名
 

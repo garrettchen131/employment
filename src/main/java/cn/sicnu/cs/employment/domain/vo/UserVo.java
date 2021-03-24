@@ -33,7 +33,4 @@ public class UserVo {
     @NotNull
     private String email;
 
-    @NotNull(message = "未指定注册者单位")
-    private Boolean isCom;
-
 }

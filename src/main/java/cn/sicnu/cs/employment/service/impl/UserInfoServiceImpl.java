@@ -17,7 +17,6 @@ import static cn.sicnu.cs.employment.common.Constants.SAVED_ERROR;
 public class UserInfoServiceImpl implements IUserInfoService {
 
     private final UserInfoMapper userInfoMapper;
-    private final UserMapper userMapper;
 
     @Override
     @Transactional(rollbackFor = RuntimeException.class)
@@ -29,7 +28,6 @@ public class UserInfoServiceImpl implements IUserInfoService {
         } else {
             userInfoMapper.updateById(info);
         }
-        userMapper.activeUser(userId);
     }
 
     @Override
@@ -48,6 +46,11 @@ public class UserInfoServiceImpl implements IUserInfoService {
     @Override
     public String getHeadImg(Long id) {
         return userInfoMapper.selectHeadImg(id);
+    }
+
+    @Override
+    public boolean isUserInfoExsisted(Long userId) {
+        return userInfoMapper.countByUserId(userId) > 0;
     }
 
 }

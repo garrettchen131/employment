@@ -15,13 +15,13 @@ public interface IUserService{
 
     boolean isUserIdExisted(Long id);
 
-    void register(boolean isCom, User user);
+    void register(User user);
 
 //    String getUsernameByEmail(String email);
 
     void resetPassword(User user, String newPassword);
 
-    void activeUser(User user);
+    void activeUser(User user, String role);
 
     void updateById(User user);
 }

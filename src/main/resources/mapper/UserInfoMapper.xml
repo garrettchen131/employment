@@ -14,4 +14,9 @@
         FROM `t_user_info`
         WHERE `user_id` = #{id}
     </select>
+    <select id="countByUserId" resultType="java.lang.Long">
+        SELECT COUNT (`user_id`)
+        FROM `t_user_info`
+        WHERE `user_id` = #{user_id}
+    </select>
 </mapper>

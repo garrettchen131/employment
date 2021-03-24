@@ -46,7 +46,7 @@ public class AuthorizeResource {
             log.info("Mobile existed!");
             return ResultInfoUtil.buildError(MOBILE_EXISTED, "电话号码重复", getCurrentUrl());
         }
-        userService.register(userVo.getIsCom(), User.builder()
+        userService.register(User.builder()
                 .username(userVo.getUsername())
                 .email(userVo.getEmail())
                 .mobile(userVo.getMobile())
