@@ -12,6 +12,7 @@ import java.util.List;
 @With
 @NoArgsConstructor
 @AllArgsConstructor
+@Deprecated
 public class ResumeRecruitVo {
 
     private Long id; // 记录id

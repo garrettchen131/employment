@@ -125,6 +125,17 @@
             <artifactId>gson</artifactId>
             <version>2.8.6</version>
         </dependency>
+        <!-- Redis连接 -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-redis</artifactId>
+        </dependency>
+        <!-- redis 依赖-->
+        <dependency>
+            <groupId>redis.clients</groupId>
+            <artifactId>jedis</artifactId>
+            <version>3.5.2</version>
+        </dependency>
     </dependencies>
 
     <build>

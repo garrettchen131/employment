@@ -10,6 +10,7 @@ import lombok.With;
 @With
 @NoArgsConstructor
 @AllArgsConstructor
+@Deprecated
 public class UserResumeVo {
 
     private Long id; //记录id

@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 
 import java.util.List;
 
+@Deprecated
 public interface ICompanyRecruitService{
 
     boolean isRecruitExisted(Long recruitId);

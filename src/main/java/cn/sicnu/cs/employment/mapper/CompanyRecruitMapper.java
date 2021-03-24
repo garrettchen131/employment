@@ -8,6 +8,7 @@ import org.apache.ibatis.annotations.Param;
 import java.util.List;
 
 @Mapper
+@Deprecated
 public interface CompanyRecruitMapper extends BaseMapper<CompanyRecruit> {
     Long countById(@Param("id")Long id);
 

@@ -1,4 +1,3 @@
-
 server:
   port: 80
 
@@ -31,3 +30,16 @@ spring:
     properties.mail.smtp.starttls.required: true
     properties.mail.smtp.ssl.enable: true
     default-encoding: utf-8
+
+  #  redis:
+  #    host: 127.0.0.1 #连接本机
+  #    port: 6379 #连接端口
+  #    password:  #连接密码（空）
+  #    jedis:
+  #      pool:
+  #        max-active: 8  #连接池的最大连接数
+  #        max-wait: -1 #最大阻塞等待时间（负值表示没有限制）
+  #        max-idle: 8 #最大空闲连接
+  #        min-idle: 0 #最小空闲连接
+  #    connect-timeout: 30000 #连接超时时间（毫秒）
+  #Matser的ip地址

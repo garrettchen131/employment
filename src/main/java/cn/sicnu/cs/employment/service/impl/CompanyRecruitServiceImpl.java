@@ -12,6 +12,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Deprecated
 public class CompanyRecruitServiceImpl implements ICompanyRecruitService {
 
     private final CompanyRecruitMapper recruitMapper;

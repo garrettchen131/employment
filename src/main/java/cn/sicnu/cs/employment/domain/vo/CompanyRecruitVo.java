@@ -12,6 +12,7 @@ import java.util.Set;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Deprecated
 public class CompanyRecruitVo {
 
     private Long   id; //简历id

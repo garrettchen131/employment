@@ -26,7 +26,6 @@ public class UserVo {
 
 //    private String matchingPassword;
 
-    @NotNull
     @Size(min = 11, max = 11)
     private String mobile;
 

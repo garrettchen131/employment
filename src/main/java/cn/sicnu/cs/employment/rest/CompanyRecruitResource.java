@@ -29,6 +29,7 @@ import static cn.sicnu.cs.employment.common.util.RequestUtil.getCurrentUser;
 @RestController
 @RequestMapping("/com/recruit")
 @RequiredArgsConstructor
+@Deprecated
 public class CompanyRecruitResource {
 
     private final ICompanyRecruitService recruitService;
