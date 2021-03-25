@@ -4,7 +4,7 @@ import cn.sicnu.cs.employment.common.ResultInfo;
 import cn.sicnu.cs.employment.common.ResultInfoUtil;
 import cn.sicnu.cs.employment.domain.entity.EmployeeInfo;
 import cn.sicnu.cs.employment.domain.entity.User;
-import cn.sicnu.cs.employment.domain.vo.EmployeeVo;
+import cn.sicnu.cs.employment.domain.vo.EmployeeInfoVo;
 import cn.sicnu.cs.employment.service.IEmployeeService;
 import cn.sicnu.cs.employment.service.IUploadService;
 import lombok.RequiredArgsConstructor;
@@ -31,7 +31,7 @@ public class EmployeeResource {
 
 
     @PostMapping("/info")
-    public ResultInfo<Void> postUserInfo(@RequestBody EmployeeVo employeeVo) {
+    public ResultInfo<Void> postUserInfo(@RequestBody EmployeeInfoVo employeeVo) {
         val employee = new EmployeeInfo();
         BeanUtils.copyProperties(employeeVo, employee);
         employeeService.addUserInfo(employee, getCurrentUser().getId());
@@ -39,13 +39,13 @@ public class EmployeeResource {
     }
 
     @GetMapping("/info")
-    public ResultInfo<EmployeeVo> getUserInfo() {
+    public ResultInfo<EmployeeInfoVo> getUserInfo() {
         User currentUser = getCurrentUser();
         val employee = employeeService.getUserInfo(currentUser.getId());
-        val employeeVo = new EmployeeVo();
+        val employeeVo = new EmployeeInfoVo();
         BeanUtils.copyProperties(employee, employeeVo);
         //补充用户名和邮箱和电话
-        EmployeeVo employeeVoToSend = employeeVo
+        EmployeeInfoVo employeeVoToSend = employeeVo
                 .withUsername(currentUser.getUsername())
                 .withMobile(currentUser.getMobile())
                 .withEmail(currentUser.getEmail());

@@ -12,4 +12,6 @@ public interface IAdminRoleService {
     List<User> listRoles(Long id);
 
     void removeAuthenticateUser(String username);
+
+    Long getAdminById(Long comId);
 }

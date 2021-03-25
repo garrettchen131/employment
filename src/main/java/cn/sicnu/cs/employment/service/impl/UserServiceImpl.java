@@ -4,15 +4,17 @@ import cn.sicnu.cs.employment.domain.entity.Role;
 import cn.sicnu.cs.employment.domain.entity.User;
 import cn.sicnu.cs.employment.domain.entity.EmployeeInfo;
 import cn.sicnu.cs.employment.exception.CustomException;
+import cn.sicnu.cs.employment.mapper.EmployeeCompanyMapper;
 import cn.sicnu.cs.employment.mapper.RoleMapper;
 import cn.sicnu.cs.employment.mapper.UserMapper;
-import cn.sicnu.cs.employment.service.ICompanyInfoService;
+import cn.sicnu.cs.employment.service.ICompanyService;
 import cn.sicnu.cs.employment.service.IEmployeeService;
 import cn.sicnu.cs.employment.service.IUserService;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.NoSuchElementException;
@@ -25,9 +27,10 @@ import static cn.sicnu.cs.employment.common.Constants.*;
 public class UserServiceImpl implements IUserService {
 
     private final UserMapper userMapper;
-    private final IEmployeeService userInfoService;
-    private final ICompanyInfoService companyInfoService;
     private final RoleMapper roleMapper;
+    private final EmployeeCompanyMapper employeeCompanyMapper;
+    private final IEmployeeService employeeService;
+    private final ICompanyService companyService;
     private final PasswordEncoder passwordEncoder;
 
     @Override
@@ -51,7 +54,7 @@ public class UserServiceImpl implements IUserService {
     }
 
     @Override
-    @Transactional(rollbackFor = RuntimeException.class)
+    @Transactional(rollbackFor = RuntimeException.class, propagation = Propagation.REQUIRED)
     public void register(User user) {
         roleMapper.findOptionalByAuthority(ROLE_PERSON)
                 .ifPresentOrElse(
@@ -89,17 +92,17 @@ public class UserServiceImpl implements IUserService {
     }
 
     @Override
-    @Transactional(rollbackFor = RuntimeException.class)
+    @Transactional(rollbackFor = RuntimeException.class, propagation = Propagation.REQUIRED)
     public void activeUser(User user, String role) {
 
         userMapper.activeUser(user.getId()); // 将用户status改为1
 
         if (ROLE_PERSON.equals(role)) {
-        // 认证普通用户
-            if (!userInfoService.isUserInfoExisted(user.getId())) {
+        // 认证普通用户(即员工)
+            if (!employeeService.isUserInfoExisted(user.getId())) {
                 // 不存在则新建空信息
                 EmployeeInfo employeeInfoToAdd = new EmployeeInfo().withUserId(user.getId());
-                userInfoService.addUserInfo(employeeInfoToAdd, user.getId());
+                employeeService.addUserInfo(employeeInfoToAdd, user.getId());
             } else {
                 //TODO： 将用户账号与用户信息 user_info 进行绑定
             }
@@ -121,8 +124,8 @@ public class UserServiceImpl implements IUserService {
                 );
         if(ROLE_ENTERPRISE_SUPER.equals(role) || ROLE_UNIVERSITY_SUPER.equals(role)){
             // 认证超级管理员，需要新增企业信息
-            if (!companyInfoService.isComInfoExisted(user.getId())){
-                companyInfoService.addCompanyInfo(null, user.getId());
+            if (!companyService.isComInfoExisted(user.getId())){
+                companyService.addCompanyInfo(null, user.getId());
             }
         } else {
             throw new CustomException(OTHER_ERROR, "认证失败！请联系超级管理员授权账号");

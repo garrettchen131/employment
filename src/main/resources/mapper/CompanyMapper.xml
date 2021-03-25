@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="cn.sicnu.cs.employment.mapper.CompanyInfoMapper">
+<mapper namespace="cn.sicnu.cs.employment.mapper.CompanyMapper">
 
     <update id="updateHeadImg">
         update `t_com_info`
@@ -22,5 +22,12 @@
         SELECT `logo`
         FROM `t_com_info`
         WHERE `com_id` = #{id}
+    </select>
+    <select id="listEmployeesByStatus" resultType="cn.sicnu.cs.employment.domain.entity.EmployeeInfo">
+        SELECT `emp`.*
+        FROM `t_emp_info` emp
+        LEFT JOIN `t_emp_com` `tec`
+        ON `tec`.`emp_id` = `emp`.`id`
+        WHERE `tec`.`com_id` = #{comId} AND `tec`.`status` = #{status};
     </select>
 </mapper>

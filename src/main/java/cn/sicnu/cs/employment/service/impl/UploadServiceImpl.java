@@ -20,7 +20,7 @@ import java.io.FileInputStream;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class UploadService implements IUploadService {
+public class UploadServiceImpl implements IUploadService {
 
     @Value("${qiniu.accessKey}")
     private String accessKey;

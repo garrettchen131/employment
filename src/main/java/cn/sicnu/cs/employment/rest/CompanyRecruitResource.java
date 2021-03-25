@@ -6,20 +6,16 @@ import cn.sicnu.cs.employment.common.util.BeanConvertUtils;
 import cn.sicnu.cs.employment.domain.entity.CompanyInfo;
 import cn.sicnu.cs.employment.domain.entity.CompanyRecruit;
 import cn.sicnu.cs.employment.domain.vo.CompanyRecruitVo;
-import cn.sicnu.cs.employment.service.ICompanyInfoService;
+import cn.sicnu.cs.employment.service.ICompanyService;
 import cn.sicnu.cs.employment.service.ICompanyRecruitService;
 import cn.sicnu.cs.employment.service.IUserService;
-import com.baomidou.mybatisplus.core.conditions.Wrapper;
-import com.baomidou.mybatisplus.core.conditions.segments.MergeSegments;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 
 import static cn.sicnu.cs.employment.common.Constants.*;
 import static cn.sicnu.cs.employment.common.util.RequestUtil.getCurrentUrl;
@@ -33,7 +29,7 @@ import static cn.sicnu.cs.employment.common.util.RequestUtil.getCurrentUser;
 public class CompanyRecruitResource {
 
     private final ICompanyRecruitService recruitService;
-    private final ICompanyInfoService infoService;
+    private final ICompanyService infoService;
     private final IUserService userService;
 
     @PutMapping("/info")

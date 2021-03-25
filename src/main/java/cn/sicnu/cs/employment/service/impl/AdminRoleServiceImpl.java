@@ -43,4 +43,9 @@ public class AdminRoleServiceImpl implements IAdminRoleService {
         Long adminId = getCurrentUser().getId();
         adminRoleMapper.deleteRole(adminId, roleId);
     }
+
+    @Override
+    public Long getAdminById(Long comId) {
+        return adminRoleMapper.getAdminById(comId);
+    }
 }
