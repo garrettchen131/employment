@@ -3,9 +3,9 @@ package cn.sicnu.cs.employment.service.impl;
 import cn.sicnu.cs.employment.domain.entity.CompanyInfo;
 import cn.sicnu.cs.employment.domain.entity.EmployeeInfo;
 import cn.sicnu.cs.employment.exception.CustomException;
+import cn.sicnu.cs.employment.mapper.AdminRoleMapper;
 import cn.sicnu.cs.employment.mapper.CompanyMapper;
 import cn.sicnu.cs.employment.mapper.EmployeeCompanyMapper;
-import cn.sicnu.cs.employment.service.IAdminRoleService;
 import cn.sicnu.cs.employment.service.ICompanyService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -26,7 +26,7 @@ public class CompanyServiceImpl implements ICompanyService {
 
     private final CompanyMapper companyMapper;
     private final EmployeeCompanyMapper employeeCompanyMapper;
-    private final IAdminRoleService adminRoleService;
+    private final AdminRoleMapper adminRoleMapper;
 
     @Override
     @Transactional(rollbackFor = RuntimeException.class)
@@ -44,7 +44,7 @@ public class CompanyServiceImpl implements ICompanyService {
     public CompanyInfo getCompanyInfo(Long comId) {
         if (!isComInfoExisted(comId)) {
             // 说明该用户为普通管理员，则进行调取超级管理员的公司信息
-            comId = adminRoleService.getAdminById(comId);
+            comId = adminRoleMapper.getAdminById(comId);
         }
         return companyMapper.selectById(comId);
     }
@@ -86,7 +86,7 @@ public class CompanyServiceImpl implements ICompanyService {
         Long comId = getCurrentUser().getId();
         if (!isComInfoExisted(comId)) {
             // 说明该用户为普通管理员，则进行调取超级管理员的公司id
-            comId = adminRoleService.getAdminById(comId);
+            comId = adminRoleMapper.getAdminById(comId);
         }
         employeeCompanyMapper.addEmployeeToCompany(time, empId, comId);
     }
@@ -101,7 +101,7 @@ public class CompanyServiceImpl implements ICompanyService {
         Long comId = getCurrentUser().getId();
         if (!isComInfoExisted(comId)) {
             // 说明该用户为普通管理员，则进行调取超级管理员的公司id
-            comId = adminRoleService.getAdminById(comId);
+            comId = adminRoleMapper.getAdminById(comId);
         }
         employeeCompanyMapper.deprecateEmployeeToCompany(time, empId, comId);
     }

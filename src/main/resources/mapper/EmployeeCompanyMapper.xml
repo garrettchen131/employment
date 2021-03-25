@@ -7,14 +7,17 @@
         VALUES(#{empId})
     </insert>
     <update id="addEmployeeToCompany">
-        INSERT INTO `t_emp_com`(`emp_id`,`com_id`,`status`,`in_time`)
-        VALUES(#{empId}, #{comId},1 , #{time})
+        UPDATE `t_emp_com`
+        SET `status` = 1,
+            `com_id` = #{comId},
+            `in_time` = #{time}
+        WHERE `emp_id` = #{empId}
     </update>
     <update id="deprecateEmployeeToCompany">
-        UPDATE TABLE `t_emp_com`
+        UPDATE `t_emp_com`
         SET `status` = 2,
-            `com_id` = #{comId}
-            `off_time` = #{in_time}
+            `com_id` = #{comId},
+            `off_time` = #{time}
         WHERE `emp_id` = #{empId}
     </update>
     <select id="getInTime" resultType="java.lang.String">

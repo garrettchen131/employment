@@ -1,3 +1,4 @@
+
 server:
   port: 12345
 
@@ -7,9 +8,12 @@ spring:
     #url: jdbc:mysql://127.0.0.1:3306/db_employment?useSSL=false&serverTimezone=GMT%2B8
     #username: root
     #password: 420130zxc
-    url: ${CK_MYSQL_URL}
-    username: ${CK_MYSQL_USERNAME}
-    password: ${CK_MYSQL_PASSWORD}
+    #url: ${CK_MYSQL_URL}
+    url: jdbc:mysql://127.0.0.1:3306/db_employment?useSSL=false&serverTimezone=GMT%2B8
+    #username: ${CK_MYSQL_USERNAME}
+    username: root
+    #password: ${CK_MYSQL_PASSWORD}
+    password: CaiKe@227
     type: com.zaxxer.hikari.HikariDataSource
     hikari:
       max-lifetime: 180000

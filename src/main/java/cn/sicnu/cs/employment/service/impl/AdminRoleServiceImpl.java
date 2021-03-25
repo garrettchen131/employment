@@ -3,8 +3,8 @@ package cn.sicnu.cs.employment.service.impl;
 import cn.sicnu.cs.employment.domain.entity.User;
 import cn.sicnu.cs.employment.exception.CustomException;
 import cn.sicnu.cs.employment.mapper.AdminRoleMapper;
+import cn.sicnu.cs.employment.mapper.UserMapper;
 import cn.sicnu.cs.employment.service.IAdminRoleService;
-import cn.sicnu.cs.employment.service.IUserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -16,16 +16,16 @@ import static cn.sicnu.cs.employment.common.util.RequestUtil.getCurrentUser;
 @Service
 @RequiredArgsConstructor
 public class AdminRoleServiceImpl implements IAdminRoleService {
-    private final IUserService userService;
-//    private final UserMapper userMapper;
+
+    private final UserMapper userMapper;
     private final AdminRoleMapper adminRoleMapper;
 
     @Override
     public void authenticateUser(String username) {
-        if (! userService.isUsernameExisted(username)) {
+        if (userMapper.countByUsername(username) < 1) {
             throw new CustomException(ERROR_CODE, "找不到授权用户！");
         }
-        Long roleId = userService.getUserIdByUsername(username);
+        Long roleId = userMapper.selectIdByUsername(username);
         Long adminId = getCurrentUser().getId();
         adminRoleMapper.insertRole(adminId, roleId);
     }
@@ -37,10 +37,10 @@ public class AdminRoleServiceImpl implements IAdminRoleService {
 
     @Override
     public void removeAuthenticateUser(String username) {
-        if (! userService.isUsernameExisted(username)) {
+        if (userMapper.countByUsername(username) < 1) {
             throw new CustomException(ERROR_CODE, "找不到目标用户！");
         }
-        Long roleId = userService.getUserIdByUsername(username);
+        Long roleId = userMapper.selectIdByUsername(username);
         Long adminId = getCurrentUser().getId();
         adminRoleMapper.deleteRole(adminId, roleId);
     }

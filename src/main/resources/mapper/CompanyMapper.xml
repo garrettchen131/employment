@@ -16,7 +16,7 @@
     <select id="countComById" resultType="java.lang.Long">
         SELECT COUNT(`com_id`)
         FROM `t_com_info`
-        WHEN `com_id` = #{id}
+        WHERE `com_id` = #{id}
     </select>
     <select id="selectHeadImg" resultType="java.lang.String">
         SELECT `logo`
