@@ -11,5 +11,5 @@ public interface IUserInfoService {
 
     String getHeadImg(Long id);
 
-    boolean isUserInfoExsisted(Long userId);
+    boolean isUserInfoExisted(Long userId);
 }

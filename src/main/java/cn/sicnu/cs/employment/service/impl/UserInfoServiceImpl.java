@@ -21,7 +21,6 @@ public class UserInfoServiceImpl implements IUserInfoService {
     @Override
     @Transactional(rollbackFor = RuntimeException.class)
     public void addUserInfo(UserInfo userInfo, Long userId) {
-//        System.out.println(userInfo.getPersonName());
         UserInfo info = userInfo.withUserId(userId);
         if (ObjectUtils.isEmpty(userInfoMapper.selectById(userId))) {
             userInfoMapper.insert(info);
@@ -49,7 +48,7 @@ public class UserInfoServiceImpl implements IUserInfoService {
     }
 
     @Override
-    public boolean isUserInfoExsisted(Long userId) {
+    public boolean isUserInfoExisted(Long userId) {
         return userInfoMapper.countByUserId(userId) > 0;
     }
 
