@@ -37,7 +37,7 @@ spring:
     default-encoding: utf-8
 
 qiniu:
-  accessKey: KmnXVKz30rC-GB9cjwrV6k0RBEGCA4O7o-aqBmzk
-  secretKey: -Q7-CvvUhGrxfxTveV401WQ_GSVqSvz2b6iqodDW
-  bucket: cai8023 #上传文件的空间名称
-  path: qpswjld2k.hn-bkt.clouddn.com #外链域名
+  accessKey: ${QINIU_ACESS_KEY}
+  secretKey: ${QINIU_SCREET_KEY}
+  bucket: ${QINIU_BUCKET}#上传文件的空间名称
+  path: ${QINIU_PATH}} #外链域名
