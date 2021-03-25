@@ -11,13 +11,15 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-@TableName("t_user_info")
-public class UserInfo {
+@TableName("t_emp_info")
+public class EmployeeInfo {
 
     @TableId(type = IdType.AUTO)
     private Long id; //用户真正的信息id
 
     private Long userId;  // 绑定用户账号的id
+
+    private Long comId; //绑定公司id
 
     private String personName; //姓名
 
@@ -42,8 +44,6 @@ public class UserInfo {
     private String training;  //培训经历
 
     private String skill;  //技能
-
-    private String comName;  //所在公司
 
     private String position;  //职位
 

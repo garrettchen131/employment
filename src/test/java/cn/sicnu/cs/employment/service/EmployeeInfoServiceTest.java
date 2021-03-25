@@ -7,9 +7,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 
-public class UserInfoServiceTest extends BaseTest {
+public class EmployeeInfoServiceTest extends BaseTest {
     @Autowired
-    private IUserInfoService userInfoService;
+    private IEmployeeService userInfoService;
 
     private UserInfo userInfo;
 

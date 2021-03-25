@@ -1,22 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="cn.sicnu.cs.employment.mapper.UserInfoMapper">
+<mapper namespace="cn.sicnu.cs.employment.mapper.EmployeeInfoMapper">
 
 
     <update id="updateHeadImg">
-        update `t_user_info`
+        update `t_emp_info`
         SET `head_img` = #{path}
         WHERE `user_id` = #{id}
     </update>
     <select id="selectHeadImg" resultType="java.lang.String">
         SELECT `head_img`
-        FROM `t_user_info`
+        FROM `t_emp_info`
         WHERE `user_id` = #{id}
     </select>
     <select id="countByUserId" resultType="java.lang.Long">
         SELECT COUNT(`user_id`)
-        FROM `t_user_info`
+        FROM `t_emp_info`
         WHERE `user_id` = #{userId}
     </select>
 </mapper>

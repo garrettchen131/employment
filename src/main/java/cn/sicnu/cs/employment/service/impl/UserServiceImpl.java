@@ -2,12 +2,12 @@ package cn.sicnu.cs.employment.service.impl;
 
 import cn.sicnu.cs.employment.domain.entity.Role;
 import cn.sicnu.cs.employment.domain.entity.User;
-import cn.sicnu.cs.employment.domain.entity.UserInfo;
+import cn.sicnu.cs.employment.domain.entity.EmployeeInfo;
 import cn.sicnu.cs.employment.exception.CustomException;
 import cn.sicnu.cs.employment.mapper.RoleMapper;
 import cn.sicnu.cs.employment.mapper.UserMapper;
 import cn.sicnu.cs.employment.service.ICompanyInfoService;
-import cn.sicnu.cs.employment.service.IUserInfoService;
+import cn.sicnu.cs.employment.service.IEmployeeService;
 import cn.sicnu.cs.employment.service.IUserService;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
@@ -25,7 +25,7 @@ import static cn.sicnu.cs.employment.common.Constants.*;
 public class UserServiceImpl implements IUserService {
 
     private final UserMapper userMapper;
-    private final IUserInfoService userInfoService;
+    private final IEmployeeService userInfoService;
     private final ICompanyInfoService companyInfoService;
     private final RoleMapper roleMapper;
     private final PasswordEncoder passwordEncoder;
@@ -98,8 +98,8 @@ public class UserServiceImpl implements IUserService {
         // 认证普通用户
             if (!userInfoService.isUserInfoExisted(user.getId())) {
                 // 不存在则新建空信息
-                UserInfo userInfoToAdd = new UserInfo().withUserId(user.getId());
-                userInfoService.addUserInfo(userInfoToAdd, user.getId());
+                EmployeeInfo employeeInfoToAdd = new EmployeeInfo().withUserId(user.getId());
+                userInfoService.addUserInfo(employeeInfoToAdd, user.getId());
             } else {
                 //TODO： 将用户账号与用户信息 user_info 进行绑定
             }

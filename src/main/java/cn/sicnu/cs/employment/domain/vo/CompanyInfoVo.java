@@ -37,4 +37,6 @@ public class CompanyInfoVo {
 
     private String username; //登录账号
 
+    private String logo; //公司LOGO
+
 }

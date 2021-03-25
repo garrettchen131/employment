@@ -38,6 +38,7 @@ public class Constants {
 
 
     public static final String PREFIX_HEAD_IMG = "head_img_";
+    public static final String PREFIX_COM_LOGO = "com_logo_";
 
 
 }

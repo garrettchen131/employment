@@ -13,4 +13,8 @@ public interface ICompanyInfoService {
     String getComNameById(Long comId);
 
     boolean isComInfoExisted(Long id);
+
+    void updateLogo(Long id, String path);
+
+    String getHeadImg(Long id);
 }

@@ -11,4 +11,8 @@ public interface CompanyInfoMapper extends BaseMapper<CompanyInfo> {
     String selectComNameById(@Param("id") Long id);
 
     Long countComById(@Param("id") Long id);
+
+    int updateHeadImg(Long id, String path);
+
+    String selectHeadImg(Long id);
 }

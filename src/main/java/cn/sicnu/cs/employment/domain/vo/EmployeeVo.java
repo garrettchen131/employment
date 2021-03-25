@@ -12,9 +12,11 @@ import java.util.Date;
 @With
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserInfoVo {
+public class EmployeeVo {
 
     private String username; //账号
+
+    private Long comId; // 当前公司id
 
     private String nickName; //昵称
 
@@ -45,8 +47,6 @@ public class UserInfoVo {
     private String training;  //培训经历
 
     private String skill;  //技能
-
-    private String comName;  //所在公司
 
     private String position;  //职位
 

@@ -1,6 +1,6 @@
 package cn.sicnu.cs.employment.domain.vo;
 
-import cn.sicnu.cs.employment.domain.entity.UserInfo;
+import cn.sicnu.cs.employment.domain.entity.EmployeeInfo;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -23,6 +23,6 @@ public class UserResumeVo {
 
     // ======= Vo =========
 
-    private UserInfo userInfo;
+    private EmployeeInfo employeeInfo;
 
 }
