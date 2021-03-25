@@ -98,7 +98,12 @@ public class CompanyServiceImpl implements ICompanyService {
         LocalDate date = LocalDate.now(); // get the current date
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         String time = date.format(dateTimeFormatter);
-        employeeCompanyMapper.deprecateEmployeeToCompany(time, empId, getCurrentUser().getId());
+        Long comId = getCurrentUser().getId();
+        if (!isComInfoExisted(comId)) {
+            // 说明该用户为普通管理员，则进行调取超级管理员的公司id
+            comId = adminRoleService.getAdminById(comId);
+        }
+        employeeCompanyMapper.deprecateEmployeeToCompany(time, empId, comId);
     }
 
     @Override

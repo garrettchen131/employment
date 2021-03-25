@@ -4,9 +4,7 @@ import cn.sicnu.cs.employment.domain.entity.Role;
 import cn.sicnu.cs.employment.domain.entity.User;
 import cn.sicnu.cs.employment.domain.entity.EmployeeInfo;
 import cn.sicnu.cs.employment.exception.CustomException;
-import cn.sicnu.cs.employment.mapper.EmployeeCompanyMapper;
-import cn.sicnu.cs.employment.mapper.RoleMapper;
-import cn.sicnu.cs.employment.mapper.UserMapper;
+import cn.sicnu.cs.employment.mapper.*;
 import cn.sicnu.cs.employment.service.ICompanyService;
 import cn.sicnu.cs.employment.service.IEmployeeService;
 import cn.sicnu.cs.employment.service.IUserService;
@@ -28,9 +26,11 @@ public class UserServiceImpl implements IUserService {
 
     private final UserMapper userMapper;
     private final RoleMapper roleMapper;
-    private final EmployeeCompanyMapper employeeCompanyMapper;
+    private final AdminRoleMapper adminRoleMapper;
     private final IEmployeeService employeeService;
+//    private final EmployeeInfoMapper employeeInfoMapper;
     private final ICompanyService companyService;
+//    private final CompanyMapper companyMapper;
     private final PasswordEncoder passwordEncoder;
 
     @Override
@@ -126,6 +126,7 @@ public class UserServiceImpl implements IUserService {
             // 认证超级管理员，需要新增企业信息
             if (!companyService.isComInfoExisted(user.getId())){
                 companyService.addCompanyInfo(null, user.getId());
+                adminRoleMapper.insertRole(user.getId(), user.getId());
             }
         } else {
             throw new CustomException(OTHER_ERROR, "认证失败！请联系超级管理员授权账号");

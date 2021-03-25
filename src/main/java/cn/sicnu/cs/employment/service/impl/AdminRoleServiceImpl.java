@@ -17,6 +17,7 @@ import static cn.sicnu.cs.employment.common.util.RequestUtil.getCurrentUser;
 @RequiredArgsConstructor
 public class AdminRoleServiceImpl implements IAdminRoleService {
     private final IUserService userService;
+//    private final UserMapper userMapper;
     private final AdminRoleMapper adminRoleMapper;
 
     @Override

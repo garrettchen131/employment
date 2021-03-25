@@ -28,6 +28,8 @@
         FROM `t_emp_info` emp
         LEFT JOIN `t_emp_com` `tec`
         ON `tec`.`emp_id` = `emp`.`id`
-        WHERE `tec`.`com_id` = #{comId} AND `tec`.`status` = #{status};
+        RIGHT JOIN `t_admin_role` `adm`
+        ON `adm`.`admin_id` = `tec`.`com_id`
+        WHERE `adm`.`role_id` = #{comId} AND `tec`.`status` = #{status};
     </select>
 </mapper>
