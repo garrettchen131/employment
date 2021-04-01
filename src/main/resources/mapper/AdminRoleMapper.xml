@@ -17,11 +17,24 @@
         FROM `t_admin_role`
         WHERE `role_id` = #{id}
     </select>
-    <select id="listRolesByAdminId" resultType="cn.sicnu.cs.employment.domain.entity.User">
-        SELECT u.`username`, u.`email`, u.`mobile`
-        FROM `t_user` u
-        RIGHT JOIN `t_admin_role` a
-        ON u.`id` = a.`role_id`
-        WHERE a.`admin_id` = #{adminId};
+<!--    <select id="listRolesByAdminId" resultType="cn.sicnu.cs.employment.domain.entity.User">-->
+<!--        SELECT u.`username`, u.`email`, u.`mobile`-->
+<!--        FROM `t_user` u-->
+<!--        RIGHT JOIN `t_admin_role` a-->
+<!--        ON u.`id` = a.`role_id`-->
+<!--        WHERE a.`admin_id` = #{adminId};-->
+<!--    </select>-->
+    <select id="getAllAdminRoleByPaging" resultType="cn.sicnu.cs.employment.domain.entity.AdminRole">
+        SELECT *
+        FROM `t_admin_role`
+        WHERE `role_id` = #{id}
+        <if test="userId != null">
+            AND `role_id` = #{userId}
+        </if>
+    </select>
+    <select id="countRoleByAdmin" resultType="java.lang.Long">
+        SELECT COUNT(`role_id`)
+        FROM `t_admin_role`
+        WHERE `admin_id`=#{adminId} AND `role_id`=#{roleId}
     </select>
 </mapper>

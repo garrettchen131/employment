@@ -30,7 +30,6 @@ public class AuthorizeResource {
 
     private final IUserService userService;
     private final ISendMailService sendMail;
-    private final KaptchaUtil kaptchaUtil;
 
     @PostMapping("/register")
     public ResultInfo<Void> register(@Valid @RequestBody UserVo userVo) {
@@ -57,27 +56,27 @@ public class AuthorizeResource {
     }
 
 
-    @GetMapping("/me")
+    @RequestMapping("/me")
     public ResultInfo<Authentication> me() {
         return ResultInfoUtil.buildSuccess(getCurrentUrl(), SecurityContextHolder.getContext().getAuthentication());
     }
 
-    /**
-     * 获取验证码图片
-     */
-    @GetMapping("/getKap")
-    public void defaultKaptcha(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
-        kaptchaUtil.getKaptchaJpg(httpServletRequest, httpServletResponse);
-    }
+//    /**
+//     * 获取验证码图片
+//     */
+//    @GetMapping("/getKap")
+//    public void defaultKaptcha(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
+//        kaptchaUtil.getKaptchaJpg(httpServletRequest, httpServletResponse);
+//    }
 
-    @PostMapping("/checkKap")
-    public ResultInfo<Void> checkKaptchaCode(HttpServletRequest httpServletRequest,
-                                             @RequestParam("code") String getCode) {
-        if (!kaptchaUtil.checkKaptchaCode(httpServletRequest, getCode)) {
-            return ResultInfoUtil.buildError(ERROR_CODE, "邮箱验证码错误或已过期", getCurrentUrl());
-        }
-        return ResultInfoUtil.buildSuccess(getCurrentUrl());
-    }
+//    @PostMapping("/checkKap")
+//    public ResultInfo<Void> checkKaptchaCode(HttpServletRequest httpServletRequest,
+//                                             @RequestParam("code") String getCode) {
+//        if (!kaptchaUtil.checkKaptchaCode(httpServletRequest, getCode)) {
+//            return ResultInfoUtil.buildError(ERROR_CODE, "邮箱验证码错误或已过期", getCurrentUrl());
+//        }
+//        return ResultInfoUtil.buildSuccess(getCurrentUrl());
+//    }
 
     @PostMapping("/sendEmail")
     public ResultInfo<Void> sendVerifyCodeEmail(@RequestParam("receiver") String receiver) {
@@ -85,7 +84,6 @@ public class AuthorizeResource {
         return ResultInfoUtil.buildSuccess(getCurrentUrl());
     }
 
-    @Deprecated
     @PostMapping("/checkEmail")
     public ResultInfo<Void> checkEmailCode(@RequestParam("verifyCode") String verifyCode) {
         boolean check = sendMail.checkVerifyCode(verifyCode);

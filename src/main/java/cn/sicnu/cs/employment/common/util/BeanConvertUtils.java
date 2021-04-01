@@ -1,12 +1,11 @@
 package cn.sicnu.cs.employment.common.util;
 
-import cn.sicnu.cs.employment.domain.entity.CompanyRecruit;
-import cn.sicnu.cs.employment.domain.vo.CompanyRecruitVo;
 import org.apache.logging.log4j.util.Supplier;
 import org.springframework.beans.BeanUtils;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+
+import static cn.sicnu.cs.employment.common.Constants.PREFIX_PIC_STORE;
 
 /**
  * 转换对象工具
@@ -70,6 +69,8 @@ public class BeanConvertUtils extends BeanUtils {
         return list;
     }
 
+
+
     /**
      * 回调接口
      *
@@ -81,10 +82,55 @@ public class BeanConvertUtils extends BeanUtils {
         void callBack(S t, T s);
     }
 
-    public static String[] toArray(String str){
-        if (str.length() <= 2){
+    public static String setToString(Set<String> list) {
+
+        if (list == null) {
             return null;
         }
-        return str.substring(1,str.length()-1).split(",");
+
+        StringBuilder result = new StringBuilder();
+        boolean first = true;
+
+        //第一个前面不拼接","
+        for (String string : list) {
+            if (first) {
+                first = false;
+            } else {
+                result.append(",");
+            }
+            result.append(string);
+        }
+        return result.toString();
+
+    }
+    public static Set<String> stringToPicSet(String str) {
+        if (str == null) {
+            return null;
+        }
+        if (str.length() == 0) {
+            return null;
+        }
+        String[] split = str.split(",");
+        Set<String> imgs = new HashSet<>();
+        for (String s : split) {
+            String img = PREFIX_PIC_STORE + s;
+            imgs.add(img);
+        }
+        return imgs;
+    }
+
+    public static Set<String> stringToSet(String str) {
+        if (str == null) {
+            return null;
+        }
+        if (str.length() == 0) {
+            return null;
+        }
+        String[] split = str.split(",");
+        return new HashSet<>(Arrays.asList(split));
+    }
+
+    public static String[] setToStringArray(Set<String> list){
+        return list.toArray(new String[list.size()]);
     }
 }

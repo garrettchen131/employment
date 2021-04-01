@@ -4,7 +4,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 @Mapper
-public interface EmployeeCompanyMapper {
+public interface EmployeeCompanyMapper{
 
     void insertEmployeeCompany(@Param("empId")Long empId);
 

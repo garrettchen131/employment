@@ -1,8 +1,6 @@
 package cn.sicnu.cs.employment.service.impl;
 
-import cn.sicnu.cs.employment.domain.entity.Role;
-import cn.sicnu.cs.employment.domain.entity.User;
-import cn.sicnu.cs.employment.domain.entity.EmployeeInfo;
+import cn.sicnu.cs.employment.domain.entity.*;
 import cn.sicnu.cs.employment.exception.CustomException;
 import cn.sicnu.cs.employment.mapper.*;
 import cn.sicnu.cs.employment.service.ICompanyService;
@@ -19,6 +17,7 @@ import java.util.NoSuchElementException;
 import java.util.Set;
 
 import static cn.sicnu.cs.employment.common.Constants.*;
+import static cn.sicnu.cs.employment.common.util.RequestUtil.getCurrentUser;
 
 @Service
 @RequiredArgsConstructor
@@ -28,9 +27,9 @@ public class UserServiceImpl implements IUserService {
     private final RoleMapper roleMapper;
     private final AdminRoleMapper adminRoleMapper;
     private final IEmployeeService employeeService;
-//    private final EmployeeInfoMapper employeeInfoMapper;
+    //    private final EmployeeInfoMapper employeeInfoMapper;
     private final ICompanyService companyService;
-//    private final CompanyMapper companyMapper;
+    //    private final CompanyMapper companyMapper;
     private final PasswordEncoder passwordEncoder;
 
     @Override
@@ -79,11 +78,11 @@ public class UserServiceImpl implements IUserService {
                 // 表示是通过找回密码【邮箱进入的此方法】
                 userMapper.findOptionalByEmail(user.getEmail()).ifPresent(
                         // 添加id
-                        userEmail -> user.withEmail(userEmail.getEmail())
+                        userEmail -> user.setId(userEmail.getId())
                 );
             }
-            User userToUpdate = new User();
-            userToUpdate.withId(user.getId())
+            User userToUpdate = user
+                    .withId(user.getId())
                     .withPassword(passwordEncoder.encode(newPassword));
             userMapper.updateById(userToUpdate);
         } catch (Exception e) {
@@ -93,44 +92,51 @@ public class UserServiceImpl implements IUserService {
 
     @Override
     @Transactional(rollbackFor = RuntimeException.class, propagation = Propagation.REQUIRED)
-    public void activeUser(User user, String role) {
-
+    public void activeEmp(User user) {
         userMapper.activeUser(user.getId()); // 将用户status改为1
-
-        if (ROLE_PERSON.equals(role)) {
         // 认证普通用户(即员工)
-            if (!employeeService.isUserInfoExisted(user.getId())) {
-                // 不存在则新建空信息
-                EmployeeInfo employeeInfoToAdd = new EmployeeInfo().withUserId(user.getId());
-                employeeService.addUserInfo(employeeInfoToAdd, user.getId());
-            } else {
-                //TODO： 将用户账号与用户信息 user_info 进行绑定
-            }
-            // 不需要再进行插入权限
-            return;
+        if (!employeeService.isUserInfoExisted(user.getId())) {
+            // 不存在则新建空信息
+            EmployeeInfo employeeInfoToAdd = new EmployeeInfo().withUserId(user.getId());
+            employeeService.addUserInfo(employeeInfoToAdd, user.getId());
+        } else {
+            //TODO： 将用户账号与用户信息 user_info 进行绑定
         }
+    }
 
-        // 认证其他权限，先将此权限和用户进行绑定
-        roleMapper.findOptionalByAuthority(role)
+    @Override
+    @Transactional(rollbackFor = RuntimeException.class, propagation = Propagation.REQUIRED)
+    public void activeAdmin(User user, String info) {
+        String roleToAdd;
+        Set<Role> auth = getCurrentUser().getAuthorities();
+        if (auth.contains(new Role((long) 3, ROLE_ENTERPRISE_SUPER))) {
+            // 说明是企业用户在进行添加
+            roleToAdd = ROLE_ENTERPRISE;
+        } else {
+            roleToAdd = ROLE_UNIVERSITY;
+        }
+        // 拿到二级管理员权限
+        roleMapper.findOptionalByAuthority(roleToAdd)
                 .ifPresentOrElse(
-                        roleToAdd -> {
-                            Set<Role> authorities = user.getAuthorities();
-                            authorities.add(roleToAdd);
-                            roleMapper.addUserRole(user.getId(), roleToAdd.getId());
+                        role -> {
+                            var userToSave = user
+                                    .withAuthorities(Set.of(role))
+                                    .withPassword(passwordEncoder.encode(DEFAULT_PASS))
+                                    .withStatus(true);
+                            userMapper.insert(userToSave);
+                            roleMapper.addUserRole(userToSave.getId(), role.getId());
+                            // 保存两者的联系
+                            var adminRole = AdminRole.builder()
+                                    .adminId(getCurrentUser().getId())
+                                    .roleId(userToSave.getId())
+                                    .info(info)
+                                    .build();
+                            adminRoleMapper.insert(adminRole);
                         },
                         () -> {
                             throw new NoSuchElementException("Cannot find role!");
                         }
                 );
-        if(ROLE_ENTERPRISE_SUPER.equals(role) || ROLE_UNIVERSITY_SUPER.equals(role)){
-            // 认证超级管理员，需要新增企业信息
-            if (!companyService.isComInfoExisted(user.getId())){
-                companyService.addCompanyInfo(null, user.getId());
-                adminRoleMapper.insertRole(user.getId(), user.getId());
-            }
-        } else {
-            throw new CustomException(OTHER_ERROR, "认证失败！请联系超级管理员授权账号");
-        }
     }
 
     @Override
@@ -144,5 +150,34 @@ public class UserServiceImpl implements IUserService {
         return userMapper.selectIdByUsername(username);
     }
 
+    @Override
+    public User getUserById(Long roleId) {
+        return userMapper.selectById(roleId);
+    }
 
+    @Override
+    public void updateStatus(Long id, Integer status) {
+        boolean statusToUpdate = status == 1;
+        userMapper.updateById(new User().withId(id).withStatus(statusToUpdate));
+    }
+
+    @Override
+    @Transactional(rollbackFor = RuntimeException.class, propagation = Propagation.REQUIRED)
+    public void activeSuperAdmin(String role) {
+        roleMapper.findOptionalByAuthority(role).ifPresentOrElse(
+                roleToAuth -> {
+                    var userToUpdate = User.builder()
+                            .id(getCurrentUser().getId())
+                            .authorities(Set.of(roleToAuth))
+                            .status(true).build();
+                    userMapper.updateById(userToUpdate);
+                    companyService.addCompanyInfo(new CompanyInfo(), userToUpdate.getId());
+                    roleMapper.addUserRole(userToUpdate.getId(), roleToAuth.getId());
+                },
+                () -> {
+                    throw new NoSuchElementException("Cannot find role!");
+                }
+        );
+    }
 }
+

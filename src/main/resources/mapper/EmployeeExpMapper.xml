@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.sicnu.cs.employment.mapper.EmployeeExpMapper">
+
+    <select id="selectEducationExp" resultType="cn.sicnu.cs.employment.domain.entity.EmployeeExpEducation">
+        SELECT *
+        FROM `t_emp_exp_education`
+        WHERE `emp_id` = #{id}
+    </select>
+    <select id="selectProjectExp" resultType="cn.sicnu.cs.employment.domain.entity.EmployeeExpProject">
+        SELECT *
+        FROM `t_emp_exp_project`
+        WHERE `emp_id` = #{id}
+    </select>
+    <select id="selectInternshipExp" resultType="cn.sicnu.cs.employment.domain.entity.EmployeeExpInternship">
+        SELECT *
+        FROM `t_emp_exp_internship`
+        WHERE `emp_id` = #{id}
+    </select>
+</mapper>

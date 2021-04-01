@@ -1,13 +1,19 @@
 package cn.sicnu.cs.employment.service.impl;
 
+import cn.sicnu.cs.employment.domain.entity.EmployeeExpEducation;
+import cn.sicnu.cs.employment.domain.entity.EmployeeExpInternship;
+import cn.sicnu.cs.employment.domain.entity.EmployeeExpProject;
 import cn.sicnu.cs.employment.domain.entity.EmployeeInfo;
 import cn.sicnu.cs.employment.exception.CustomException;
+import cn.sicnu.cs.employment.mapper.EmployeeExpMapper;
 import cn.sicnu.cs.employment.mapper.EmployeeInfoMapper;
 import cn.sicnu.cs.employment.service.IEmployeeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
+
+import java.util.Set;
 
 import static cn.sicnu.cs.employment.common.Constants.SAVED_ERROR;
 
@@ -16,6 +22,7 @@ import static cn.sicnu.cs.employment.common.Constants.SAVED_ERROR;
 public class EmployeeServiceImpl implements IEmployeeService {
 
     private final EmployeeInfoMapper employeeInfoMapper;
+    private final EmployeeExpMapper employeeExpMapper;
 
     @Override
     @Transactional(rollbackFor = RuntimeException.class)
@@ -30,9 +37,8 @@ public class EmployeeServiceImpl implements IEmployeeService {
 
     @Override
     @Transactional(rollbackFor = RuntimeException.class)
-
     public EmployeeInfo getUserInfo(Long userId) {
-        return employeeInfoMapper.selectById(userId);
+        return employeeInfoMapper.selectByUserId(userId);
     }
 
     @Override
@@ -56,6 +62,23 @@ public class EmployeeServiceImpl implements IEmployeeService {
 
     public boolean isUserInfoExisted(Long userId) {
         return employeeInfoMapper.countByUserId(userId) > 0;
+    }
+
+    @Override
+    public Set<EmployeeExpEducation> getEducationExp(Long id) {
+        return employeeExpMapper.selectEducationExp(id);
+    }
+
+    @Override
+    public Set<EmployeeExpInternship> getInternshipExp(Long id) {
+        return employeeExpMapper.selectInternshipExp(id);
+
+    }
+
+    @Override
+    public Set<EmployeeExpProject> getProjectExp(Long id) {
+        return employeeExpMapper.selectProjectExp(id);
+
     }
 
 }

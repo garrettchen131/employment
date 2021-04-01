@@ -16,7 +16,7 @@ import java.io.ByteArrayOutputStream;
 
 import static cn.sicnu.cs.employment.common.Constants.OTHER_ERROR;
 
-
+@Deprecated
 @Component
 @Slf4j
 @RequiredArgsConstructor

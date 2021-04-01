@@ -134,9 +134,9 @@ public class JwtUtil {
         val accessToken = createAccessToken(user);
         val refreshToken = createRefreshToken(user);
         Cookie accessCookie = new Cookie("access_token", accessToken);
-        accessCookie.setHttpOnly(true);
+//        accessCookie.setHttpOnly(true);
         Cookie refreshCookie = new Cookie("refresh_token", refreshToken);
-        refreshCookie.setHttpOnly(true);
+//        refreshCookie.setHttpOnly(true);
         res.addCookie(accessCookie);
         res.addCookie(refreshCookie);
     }

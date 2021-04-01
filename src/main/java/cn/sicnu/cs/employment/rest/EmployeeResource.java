@@ -10,6 +10,7 @@ import cn.sicnu.cs.employment.service.IUploadService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.BeanUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -29,26 +30,20 @@ public class EmployeeResource {
     private final IEmployeeService employeeService;
     private final IUploadService uploadService;
 
-
-    @PostMapping("/info")
-    public ResultInfo<Void> postUserInfo(@RequestBody EmployeeInfoVo employeeVo) {
-        val employee = new EmployeeInfo();
-        BeanUtils.copyProperties(employeeVo, employee);
-        employeeService.addUserInfo(employee, getCurrentUser().getId());
-        return ResultInfoUtil.buildSuccess(getCurrentUrl());
-    }
-
     @GetMapping("/info")
-    public ResultInfo<EmployeeInfoVo> getUserInfo() {
-        User currentUser = getCurrentUser();
-        val employee = employeeService.getUserInfo(currentUser.getId());
+    public ResultInfo<EmployeeInfoVo> getUserInfo(@RequestParam(value = "id", required = false)Long id) {
+        if(id== null){
+            id = getCurrentUser().getId();
+        }
+        val employee = employeeService.getUserInfo(id);
         val employeeVo = new EmployeeInfoVo();
         BeanUtils.copyProperties(employee, employeeVo);
-        //补充用户名和邮箱和电话
+        //补充教育经历、实习经历、项目经历、头像
         EmployeeInfoVo employeeVoToSend = employeeVo
-                .withUsername(currentUser.getUsername())
-                .withMobile(currentUser.getMobile())
-                .withEmail(currentUser.getEmail());
+                .withHeadImg(PREFIX_HEAD_IMG + employee.getHeadImg())
+                .withEducationExp(employeeService.getEducationExp(employee.getId()))
+                .withInternshipExp(employeeService.getInternshipExp(employee.getId()))
+                .withProjectExp(employeeService.getProjectExp(employee.getId()));
         return ResultInfoUtil.buildSuccess(getCurrentUrl(), employeeVoToSend);
     }
 
@@ -77,7 +72,7 @@ public class EmployeeResource {
         if ("".equals(headImg)){
             return ResultInfoUtil.buildError(SAVED_ERROR, "用户暂未设置头像！",getCurrentUrl());
         }
-        return ResultInfoUtil.buildSuccess(getCurrentUrl(),headImg);
+        return ResultInfoUtil.buildSuccess(getCurrentUrl(),PREFIX_PIC_STORE + headImg);
     }
 
 }

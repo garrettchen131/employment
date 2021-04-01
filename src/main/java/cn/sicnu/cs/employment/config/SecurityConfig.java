@@ -1,6 +1,7 @@
 package cn.sicnu.cs.employment.config;
 
 import cn.sicnu.cs.employment.common.util.JwtUtil;
+import cn.sicnu.cs.employment.exception.SimpleAuthenticationEntryPoint;
 import cn.sicnu.cs.employment.security.jwt.JwtFilter;
 import cn.sicnu.cs.employment.security.rest.RestAuthenticationFailureHandler;
 import cn.sicnu.cs.employment.security.rest.RestAuthenticationFilter;
@@ -61,11 +62,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests(authentication ->
                         authentication
                                 .mvcMatchers("/", "/auth/**").permitAll()
-                                .mvcMatchers("/admin/**").hasAnyAuthority(ROLE_UNIVERSITY_SUPER,ROLE_ENTERPRISE_SUPER)
+                                .mvcMatchers("/admin/**").hasAnyAuthority(ROLE_UNIVERSITY_SUPER, ROLE_ENTERPRISE_SUPER)
 
                                 .anyRequest().authenticated())
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
-                .addFilterAt(restAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
+                .addFilterAt(restAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
+                .exceptionHandling().authenticationEntryPoint(new SimpleAuthenticationEntryPoint());
+
     }
 
     @Override
@@ -92,7 +95,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
     public RestAuthenticationFilter restAuthenticationFilter() throws Exception {
         val filter = new RestAuthenticationFilter(objectMapper);
-        filter.setAuthenticationSuccessHandler(new RestAuthenticationSuccessHandler(jwtUtil,objectMapper));
+        filter.setAuthenticationSuccessHandler(new RestAuthenticationSuccessHandler(jwtUtil, objectMapper));
         filter.setAuthenticationFailureHandler(new RestAuthenticationFailureHandler(objectMapper));
         filter.setAuthenticationManager(authenticationManager());
         filter.setFilterProcessesUrl("/login");

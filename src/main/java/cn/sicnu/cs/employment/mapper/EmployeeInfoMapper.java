@@ -13,4 +13,6 @@ public interface EmployeeInfoMapper extends BaseMapper<EmployeeInfo> {
     String selectHeadImg(@Param("id") Long id);
 
     long countByUserId(@Param("userId")Long userId);
+
+    EmployeeInfo selectByUserId(@Param("userId") Long userId);
 }

@@ -15,7 +15,7 @@ public class Constants {
     // 成功提示信息
     public static final String SUCCESS_MESSAGE = "Successful.";
     // 错误
-    public static final int ERROR_CODE = 0;
+    public static final int ERROR_CODE = 500;
     // 未登录
     public static final int NO_LOGIN_CODE = -100;
     // 请登录提示信息
@@ -39,6 +39,13 @@ public class Constants {
 
     public static final String PREFIX_HEAD_IMG = "head_img_";
     public static final String PREFIX_COM_LOGO = "com_logo_";
+
+    // 图片输出时补全地址
+    public static final String PREFIX_PIC_STORE = "http://" + "qqkwbsi7n.hn-bkt.clouddn.com" + "/";
+
+
+    //默认密码
+    public static final String DEFAULT_PASS = "123456";
 
 
 }

@@ -19,4 +19,9 @@
         FROM `t_emp_info`
         WHERE `user_id` = #{userId}
     </select>
+    <select id="selectByUserId" resultType="cn.sicnu.cs.employment.domain.entity.EmployeeInfo">
+        SELECT *
+        FROM `t_emp_info`
+        WHERE `user_id` = #{userId}
+    </select>
 </mapper>

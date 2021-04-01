@@ -12,7 +12,6 @@ import cn.sicnu.cs.employment.service.ICompanyService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
-import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.BeanUtils;
 import org.springframework.web.bind.annotation.*;
 
@@ -50,8 +49,8 @@ public class CompanyResource {
         return ResultInfoUtil.buildSuccess(getCurrentUrl());
     }
 
-    @DeleteMapping("/emp")
-    public ResultInfo<Void> deleteEmployee(@RequestParam("empId") Long empId) {
+    @DeleteMapping("/emp/{empId}")
+    public ResultInfo<Void> deleteEmployee(@PathVariable("empId") Long empId) {
         companyService.deprecateEmployee(empId);
         return ResultInfoUtil.buildSuccess(getCurrentUrl());
     }

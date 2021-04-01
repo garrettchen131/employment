@@ -44,13 +44,7 @@ public class SendMailServiceImpl implements ISendMailService {
                         + verCode
                         + "，本次验证码五分钟内有效，请及时输入。（请勿泄露此验证码）\n"
         );
-        // 发送邮件
-        try {
-            javaMailSender.send(simpleMailMessage);
-        } catch (Exception e) {
-            throw new CustomException(OTHER_ERROR, "邮件发送失败！");
-        }
-
+        // 保存验证码到Redis
         try {
             Long userId = getCurrentUser().getId();
             // 保存到Redis
@@ -60,6 +54,15 @@ public class SendMailServiceImpl implements ISendMailService {
         } catch (Exception e) {
             throw new CustomException(OTHER_ERROR, "Redis出现错误，" + e.getMessage());
         }
+
+        // 发送邮件
+        try {
+            javaMailSender.send(simpleMailMessage);
+        } catch (Exception e) {
+            throw new CustomException(OTHER_ERROR, "邮件发送失败！");
+        }
+
+
     }
 
     /**

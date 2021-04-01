@@ -38,7 +38,8 @@ public class RestAuthenticationSuccessHandler implements AuthenticationSuccessHa
         Set<Role> authorities = user.getAuthorities();
         String auth = authorities.toString();
         val succData = Map.of(
-                "authorities", auth
+                "authorities", auth,
+                "status", user.getStatus()
         );
         response.getWriter().println(objectMapper.writeValueAsString(succData));
         log.debug("认证成功");

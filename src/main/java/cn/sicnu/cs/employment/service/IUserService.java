@@ -21,9 +21,17 @@ public interface IUserService{
 
     void resetPassword(User user, String newPassword);
 
-    void activeUser(User user, String role);
+    void activeEmp(User user);
+
+    void activeAdmin(User user, String info);
 
     void updateById(User user);
 
     Long getUserIdByUsername(String username);
+
+    User getUserById(Long roleId);
+
+    void updateStatus(Long id, Integer status);
+
+    void activeSuperAdmin(String role);
 }
